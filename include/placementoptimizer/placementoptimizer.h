@@ -20,7 +20,7 @@ class PlacementOptimizerData :  boost::noncopyable   {
 public:
     /// Constructor with default values for initiailization
     PlacementOptimizerData(){
-        numThreads = 3;
+        numThreads = 4;
         points[0] = 0.3;
         points[1] = 0.3;
         points[2] = -0.3;
@@ -58,7 +58,7 @@ public:
     /// \param EnvironmentBasePtr Environment that needs to be checked
     /// \param string Bodies like floor can be ignored
     /// \return bool returns true if no collision occured
-    void CheckNoCollisions(EnvironmentBasePtr env, string ignoreBody, bool &collision);
+    void CheckNoCollisions(EnvironmentBasePtr env, string ignoreBody);
 	
     /// number of threads
     unsigned int numThreads;
@@ -157,6 +157,8 @@ private:
     /// \return bool returns true if planning loop is performed
     bool PlanningLoop (EnvironmentBasePtr env);
 
+    unsigned int  UpdateGrid();
+
     /// Cloned Environment
     EnvironmentBasePtr _penv;
 
@@ -183,6 +185,7 @@ private:
     /// Currently supports only 6D IK
     string _iktype;
     boost::mutex _mutex;
+    std::vector< Transform > gridMap;
 
 
 };

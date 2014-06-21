@@ -12,13 +12,14 @@ void PlacementOptimizerData :: writePoseData(Transform T) {
         
 	//boost::lock<boost::mutex> scoped_lock(_posemutex);
 	if ( !!_posemutex.try_lock()){
+		std::cout << T.trans << std::endl;
 		_allPoses.push_back(T);
 		//std::cout << boost::this_thread::get_id() << " got mutex" << std::endl;
 		_posemutex.unlock();
 	}
 	else{
 		//tested. condition never occurs
-	   //std::cout << boost::this_thread::get_id() << " did not get mutex" << std::endl;
+	     std::cout << boost::this_thread::get_id() << " did not get mutex" << std::endl;
 	}
 
 }
@@ -51,17 +52,21 @@ void PlacementOptimizerData::writeData(TrajectoryBasePtr ptraj, double time){
 
 }
 
-void PlacementOptimizerData :: CheckNoCollisions(EnvironmentBasePtr env, string ignoreBody, bool &collisions){
+void PlacementOptimizerData :: CheckNoCollisions(EnvironmentBasePtr pclondedenv, string ignoreBody){
 
-    EnvironmentBasePtr pclondedenv = env->CloneSelf(Clone_Bodies);  //clone body
+    
+    
+    //EnvironmentMutex::scoped_lock lock(env->GetMutex());
     pclondedenv->Remove( pclondedenv->GetKinBody(ignoreBody));      // remove floor
-    RobotBasePtr probot_clone = pclondedenv->GetRobot(robotname); 
+    RobotBasePtr probot_clone = pclondedenv->GetRobot(robotname);
+    Transform T = probot_clone->GetTransform();
+    //std::cout << T.trans << std::endl;
     //check for environment collision
     if ( !pclondedenv->CheckCollision(RobotBaseConstPtr(probot_clone)) ){ 
 	writePoseData(probot_clone->GetTransform());
 	
     }
-    pclondedenv->Destroy(); // destroy the clone environment
+    
 	
     
 
@@ -136,86 +141,88 @@ DiscretizedPlacementOptimizer :: ~DiscretizedPlacementOptimizer(){
 
 
 }
-bool DiscretizedPlacementOptimizer :: OptimizeBase(){
+
+unsigned int DiscretizedPlacementOptimizer :: UpdateGrid(){
 
     //Set robot to the extreme end
     Transform robot_t;
-    
+   
     RaveVector< dReal > transR(_data->points[2], _data->points[3], 0);
     robot_t.trans = transR;
-    bool collisions;
-    unsigned int cnt = 0, thread_cnt = _data->numThreads,  _thread_cnt = 0; //local count for threads
-    vector<boost::shared_ptr<boost::thread> > _threadscollision(thread_cnt);
-    
-	
-    // Compute the total number of discretized values against which loop is running
-    unsigned int tot = ((( abs(_data->points[0]) + abs(_data->points[2]) )/_data->discretization_x )+1) *
-                       ((( abs(_data->points[1]) + abs(_data->points[3]) )/_data->discretization_y )+1) *
-                       ((abs(_data->z) /_data->discretization_z )+1);
 
-    unsigned int tot_o = tot;
+     for (unsigned int i = 0; i <= (( abs(_data->points[0]) + abs(_data->points[2]) )/_data->discretization_x )+1; ){
+        for (unsigned int j = 0; j <=  (( abs(_data->points[1]) + abs(_data->points[3]) )/_data->discretization_y )+1;) {
+            for (unsigned int k = 0; k <= (abs(_data->z) /_data->discretization_z)+1;k++) {
+		robot_t.trans = transR;
+                gridMap.push_back(robot_t); 
+		transR[2] = transR[2]+ (_data->discretization_z);
 
-    for (unsigned int i = 0; i <= (( abs(_data->points[0]) + abs(_data->points[2]) )/_data->discretization_x )+1; i++) {
-        for (unsigned int j = 0; j <=  (( abs(_data->points[1]) + abs(_data->points[3]) )/_data->discretization_y )+1; j++) {
-            for (unsigned int k = 0; k <= (unsigned int)(abs(_data->z) /_data->discretization_z)+1; k++) {
-
-              
-		
-		/* ----------------------------------------------------------------------------*/
-
-
-
-		//_data->CheckNoCollisions(_penv,_data->ignorebody,collisions);
-		//transR[2] = transR[2]+ _data->discretization_z;
-               /* if(!!(_data->CheckNoCollisions(_penv, _data->ignorebody))) {
-                    _allPoses.push_back(_probot->GetTransform());
-                    //PlanningLoop ( _penv ); // Planning Loop
-
-                }
-                else{
-                    RAVELOG_INFOA("Robot in collision with the environment\n");
-                }*/
-                //std::cout << tot << "/" << tot_o << " " << transR << std::endl;
-		if( cnt < thread_cnt ) {
-			 robot_t.trans = transR;
-                	_probot->SetTransform(robot_t);
-		        _threadscollision[cnt].reset(new boost::thread(boost::bind(&PlacementOptimizerData:: CheckNoCollisions,_data, _penv, _data->ignorebody, collisions)));
-		         cnt++;
-		        _thread_cnt++;
-			 tot -= 1;
-                        transR[2] = transR[2]+ _data->discretization_z;
-			continue;
-		}
-		else {
-		        for (unsigned int m=0; m < cnt; m++) {
-		            _threadscollision[m]->join();
-        		    _thread_cnt--;
-
-	                    }
-		        k--;
-		        cnt = 0;
-			
-		}
-               
-            }
-            transR[2] = 0;
-            transR[1] = transR[1] + _data->discretization_y;
-            robot_t.trans = transR;
-
+	}
+	           transR[2] = 0;
+		    transR[1] = transR[1] + _data->discretization_y;
+		    robot_t.trans = transR;
+		    j++;
         }
-        transR[2] = 0;
-        transR[1] = _data->points[2];
-        transR[0] = transR[0] + _data->discretization_x;
-        robot_t.trans = transR;
+	transR[2] = 0;
+	transR[1] = _data->points[2];
+	transR[0] = transR[0] + _data->discretization_x;
+	robot_t.trans = transR;
+	i++;
     }
-    for (unsigned int l=0; l < cnt; l++) {
+    RAVELOG_INFO("Found %d grids to be evaluated for planning \n", gridMap.size());
+    return gridMap.size();
 
-       _threadscollision[l]->join();
-       _thread_cnt--;
 
-    }
+}
+bool DiscretizedPlacementOptimizer :: OptimizeBase(){
 
+    unsigned int cnt = 0, thread_cnt = _data->numThreads,  _thread_cnt = 0; //local count for threads
+    std::vector< EnvironmentBasePtr > pclondedenv ( thread_cnt );
+    RobotBasePtr probot_clone;
+    unsigned int gridSize = UpdateGrid();
+    RobotBasePtr robot;
+   
+    vector<boost::shared_ptr<boost::thread> > _threadscollision(thread_cnt);
+
+    for (unsigned int i = 0; i < gridMap.size() ; ){
+	
+	 //clone body
+      
+	
+	//_data->CheckNoCollisions(_penv,_data->ignorebody);
+	if(cnt < thread_cnt){
+		pclondedenv[cnt] = _penv->CloneSelf(Clone_Bodies); 
+		probot_clone = pclondedenv[cnt]->GetRobot(_data->robotname);
+		probot_clone->SetTransform(gridMap[i]);
+		i = i+1;
+		//boost::this_thread::sleep(boost::posix_time::milliseconds(10));
+		_threadscollision[cnt].reset(new boost::thread(boost::bind(&PlacementOptimizerData:: CheckNoCollisions,_data, pclondedenv[cnt] , _data->ignorebody)));
+		
+		cnt++;
+		_thread_cnt++;
+		
+	}
+	else{
+		//RAVELOG_INFO("Found %d threads to join \n",cnt);
+		for (unsigned int m=0; m < cnt; m++) {
+		            _threadscollision[m]->join();
+			    pclondedenv[m]->Destroy();
+			     
+        	}
+		//boost::this_thread::sleep(boost::posix_time::milliseconds(100));
+		 // destroy the clone environment
+		cnt = 0;
+		
+	   //i = i -1;
+
+	}
+	
+      }
+      for (unsigned int m=0; m < cnt; m++) {
+		_threadscollision[m]->join();
+        }
     
+    RAVELOG_INFO("GLOBAL COUNT %d  \n",_thread_cnt);
     return true; // always returns true if all the threads are complete
 
 }
