@@ -17,7 +17,7 @@ set_target_properties(baseplacementoptimizer PROPERTIES COMPILE_FLAGS "${OpenRAV
 target_link_libraries(baseplacementoptimizer ${OpenRAVE_LIBRARIES} ${OpenRAVE_CORE_LIBRARIES} boost_system boost_thread boost_program_options)
 
 
-add_executable(mujinchallenge mujinchallenge.cpp)
-set_target_properties(mujinchallenge PROPERTIES COMPILE_FLAGS "${OpenRAVE_CXX_FLAGS}" LINK_FLAGS "${OpenRAVE_LINK_FLAGS}")
-target_link_libraries(mujinchallenge ${OpenRAVE_LIBRARIES} ${OpenRAVE_CORE_LIBRARIES} baseplacementoptimizer boost_system boost_thread boost_program_options)
-install(TARGETS mujinchallenge DESTINATION .)
+add_executable(testfunction testfunction.cpp)
+set_target_properties(testfunction PROPERTIES COMPILE_FLAGS "${OpenRAVE_CXX_FLAGS}" LINK_FLAGS "${OpenRAVE_LINK_FLAGS}")
+target_link_libraries(testfunction ${OpenRAVE_LIBRARIES} ${OpenRAVE_CORE_LIBRARIES} baseplacementoptimizer boost_system boost_thread boost_program_options)
+install(TARGETS testfunction DESTINATION .)

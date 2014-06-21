@@ -8,6 +8,12 @@
 #include <placementoptimizer/placementoptimizer.h>
 
 
+void PlacementOptimizerData :: writePoseData(Transform T){
+        
+	boost::mutex::scoped_lock lock(_posemutex);
+	_allPoses.push_back(T);
+
+}
 
 void PlacementOptimizerData::writeData(TrajectoryBasePtr ptraj, double time){
 
@@ -44,9 +50,8 @@ void PlacementOptimizerData :: CheckNoCollisions(EnvironmentBasePtr env, string 
     RobotBasePtr probot_clone = pclondedenv->GetRobot(robotname); 
     //check for environment collision
     if ( !pclondedenv->CheckCollision(RobotBaseConstPtr(probot_clone)) ){ 
-	__mutex.lock();
-	_allPoses.push_back(probot_clone->GetTransform());
-	__mutex.unlock();
+	writePoseData(probot_clone->GetTransform());
+	
     }
     pclondedenv->Destroy(); // destroy the clone environment
 	
@@ -57,7 +62,7 @@ void PlacementOptimizerData :: CheckNoCollisions(EnvironmentBasePtr env, string 
 void PlacementOptimizerData:: GetTrajectoryTime(EnvironmentBasePtr _penv, boost::shared_ptr<PlacementOptimizerData> _data, std::vector<dReal> &vsolutionA, std::vector<dReal> &vsolutionB, TrajectoryBasePtr &ptraj, double  &time){
 
 
-    std::cout << "This thread currently in operation" <<  boost::this_thread::get_id() << std::endl;
+    //std::cout << "This thread currently in operation" <<  boost::this_thread::get_id() << std::endl;
     //EnvironmentBasePtr _penv = penv->CloneSelf(Clone_Bodies);
     PlannerBasePtr planner = RaveCreatePlanner(_penv,"birrt");
     ptraj = RaveCreateTrajectory(_penv,"");
@@ -198,7 +203,7 @@ bool DiscretizedPlacementOptimizer :: OptimizeBase(){
 
     }
 
-    std::cout << _data->_allPoses.size() << std::endl;
+    
     return true; // always returns true if all the threads are complete
 
 }

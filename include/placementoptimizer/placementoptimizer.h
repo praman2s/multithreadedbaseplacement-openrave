@@ -43,6 +43,8 @@ public:
     virtual ~PlacementOptimizerData(){
     };
     void writeData(TrajectoryBasePtr ptraj, double time);
+    
+    
 
     /// \brief Performs the actual planning on the cloned environment.
     ///        No loop should be performed. Since multithreaded, each time this function is called, environment
@@ -80,7 +82,10 @@ public:
 
 private:
     /// mutex for shared resource
-    boost::mutex __mutex;
+    boost::mutex __mutex, _posemutex;
+    /// internal memeber function to write pose data
+    void writePoseData(Transform T) const;
+	
 };
 
 
