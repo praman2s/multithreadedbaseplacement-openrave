@@ -1,7 +1,7 @@
 // -*- coding: utf-8 -*-
 // Praveen Ramanujam <praveen.ramanujam@gmail.com>
 //
-// This file is part of Mujin Challenge.
+// This file is part of multithreaded base placement optimizatin function.
 // Includes common includes and inline functions for placementoptimizer.
 
 #ifndef _PLACEMENTOPTIMIZER_H
