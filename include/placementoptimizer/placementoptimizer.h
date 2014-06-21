@@ -8,18 +8,19 @@
 #define _PLACEMENTOPTIMIZER_H
 
 #include "common.h"
+#include <boost/noncopyable.hpp>
 
 
 /////////////////////////////////////////////////////////////////////////////////
 /// Data Storage for PlacementOptimizerBase . Contains Default Values
 /////////////////////////////////////////////////////////////////////////////////
 
-class PlacementOptimizerData {
+class PlacementOptimizerData :  boost::noncopyable   {
 
 public:
     /// Constructor with default values for initiailization
     PlacementOptimizerData(){
-        numThreads = 675;
+        numThreads = 3;
         points[0] = 0.3;
         points[1] = 0.3;
         points[2] = -0.3;
@@ -79,12 +80,13 @@ public:
     float discretization_z;
     /// All robot poses where robot is not suffering from collision
     std::vector < Transform > _allPoses;
+   
 
 private:
     /// mutex for shared resource
-    boost::mutex __mutex, _posemutex;
+    mutable boost::mutex __mutex, _posemutex;
     /// internal memeber function to write pose data
-    void writePoseData(Transform T) const;
+    void writePoseData(Transform T);
 	
 };
 

@@ -6,12 +6,20 @@
 
 
 #include <placementoptimizer/placementoptimizer.h>
+#include <boost/thread/mutex.hpp>
 
-
-void PlacementOptimizerData :: writePoseData(Transform T){
+void PlacementOptimizerData :: writePoseData(Transform T) {
         
-	boost::mutex::scoped_lock lock(_posemutex);
-	_allPoses.push_back(T);
+	//boost::lock<boost::mutex> scoped_lock(_posemutex);
+	if ( !!_posemutex.try_lock()){
+		_allPoses.push_back(T);
+		//std::cout << boost::this_thread::get_id() << " got mutex" << std::endl;
+		_posemutex.unlock();
+	}
+	else{
+		//tested. condition never occurs
+	   //std::cout << boost::this_thread::get_id() << " did not get mutex" << std::endl;
+	}
 
 }
 
@@ -151,8 +159,14 @@ bool DiscretizedPlacementOptimizer :: OptimizeBase(){
         for (unsigned int j = 0; j <=  (( abs(_data->points[1]) + abs(_data->points[3]) )/_data->discretization_y )+1; j++) {
             for (unsigned int k = 0; k <= (unsigned int)(abs(_data->z) /_data->discretization_z)+1; k++) {
 
-                robot_t.trans = transR;
-                _probot->SetTransform(robot_t);
+              
+		
+		/* ----------------------------------------------------------------------------*/
+
+
+
+		//_data->CheckNoCollisions(_penv,_data->ignorebody,collisions);
+		//transR[2] = transR[2]+ _data->discretization_z;
                /* if(!!(_data->CheckNoCollisions(_penv, _data->ignorebody))) {
                     _allPoses.push_back(_probot->GetTransform());
                     //PlanningLoop ( _penv ); // Planning Loop
@@ -161,30 +175,28 @@ bool DiscretizedPlacementOptimizer :: OptimizeBase(){
                 else{
                     RAVELOG_INFOA("Robot in collision with the environment\n");
                 }*/
-                std::cout << tot << "/" << tot_o << " " << transR << std::endl;
+                //std::cout << tot << "/" << tot_o << " " << transR << std::endl;
 		if( cnt < thread_cnt ) {
+			 robot_t.trans = transR;
+                	_probot->SetTransform(robot_t);
 		        _threadscollision[cnt].reset(new boost::thread(boost::bind(&PlacementOptimizerData:: CheckNoCollisions,_data, _penv, _data->ignorebody, collisions)));
 		         cnt++;
 		        _thread_cnt++;
-		       // continue;
+			 tot -= 1;
+                        transR[2] = transR[2]+ _data->discretization_z;
+			continue;
 		}
 		else {
-		        for (unsigned int k=0; k < cnt; k++) {
-		            if (!!_threadscollision[k]->joinable())
-		            {
-		                _thread_cnt--;
-		                _threadscollision[k]->join();
-		                break;
-		            }
+		        for (unsigned int m=0; m < cnt; m++) {
+		            _threadscollision[m]->join();
+        		    _thread_cnt--;
 
-	                    
+	                    }
 		        k--;
 		        cnt = 0;
-			}
+			
 		}
-                tot -= 1;
-                transR[2] = transR[2]+ _data->discretization_z;
-
+               
             }
             transR[2] = 0;
             transR[1] = transR[1] + _data->discretization_y;
@@ -196,10 +208,10 @@ bool DiscretizedPlacementOptimizer :: OptimizeBase(){
         transR[0] = transR[0] + _data->discretization_x;
         robot_t.trans = transR;
     }
-    for (unsigned int k=0; k < cnt; k++) {
+    for (unsigned int l=0; l < cnt; l++) {
 
-       _threadscollision[k]->join();
-        _thread_cnt--;
+       _threadscollision[l]->join();
+       _thread_cnt--;
 
     }
 
