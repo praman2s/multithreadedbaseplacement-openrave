@@ -22,7 +22,7 @@ set_target_properties(testfunction PROPERTIES COMPILE_FLAGS "${OpenRAVE_CXX_FLAG
 target_link_libraries(testfunction ${OpenRAVE_LIBRARIES} ${OpenRAVE_CORE_LIBRARIES} baseplacementoptimizer boost_system boost_thread boost_program_options)
 install(TARGETS testfunction DESTINATION .)
 
-add_executable(trial baseplacement_threaded_ln.cpp)
-set_target_properties(trial PROPERTIES COMPILE_FLAGS "${OpenRAVE_CXX_FLAGS}" LINK_FLAGS "${OpenRAVE_LINK_FLAGS}")
-target_link_libraries(trial ${OpenRAVE_LIBRARIES} ${OpenRAVE_CORE_LIBRARIES} boost_system boost_thread boost_program_options)
-install(TARGETS trial DESTINATION .)
+#add_executable(trial baseplacement_threaded_ln.cpp)
+#set_target_properties(trial PROPERTIES COMPILE_FLAGS "${OpenRAVE_CXX_FLAGS}" LINK_FLAGS "${OpenRAVE_LINK_FLAGS}")
+#target_link_libraries(trial ${OpenRAVE_LIBRARIES} ${OpenRAVE_CORE_LIBRARIES} boost_system boost_thread boost_program_options)
+#install(TARGETS trial DESTINATION .)
