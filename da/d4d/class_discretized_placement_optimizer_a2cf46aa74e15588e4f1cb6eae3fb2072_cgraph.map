@@ -1,0 +1,4 @@
+<map id="CheckNoCollisions" name="CheckNoCollisions">
+<area shape="rect" id="node2" href="$da/d4d/class_discretized_placement_optimizer.html#ac887e7037dd60f0aa546b9021db48735" title="Performs the actual planning on the cloned environment. " alt="" coords="187,5,298,32"/>
+<area shape="rect" id="node3" href="$da/d4d/class_discretized_placement_optimizer.html#ae75d036c4c16ce6f3d748e86cb459506" title="writePoseData" alt="" coords="189,56,296,83"/>
+</map>

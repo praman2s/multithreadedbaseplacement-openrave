@@ -1,0 +1,5 @@
+<map id="GetTrajectoryTime" name="GetTrajectoryTime">
+<area shape="rect" id="node2" href="$da/d4d/class_discretized_placement_optimizer.html#a855f55aa4cea5cf4c70fe956a021722c" title="Multithreaded Trajectory generation from Pt A to Pt B with differnt IK solutions. ..." alt="" coords="207,5,308,32"/>
+<area shape="rect" id="node4" href="$da/d4d/class_discretized_placement_optimizer.html#ad3bb0b336b32e5000635a4be031303c1" title="Multithreaded Trajectory generation from Pt A to Pt B with differnt IK solutions. ..." alt="" coords="184,56,331,83"/>
+<area shape="rect" id="node3" href="$da/d4d/class_discretized_placement_optimizer.html#a3441419dedc58e6d618fd8886a2dc3f9" title="The main function which needs to be called for base optimization. " alt="" coords="379,5,482,32"/>
+</map>
