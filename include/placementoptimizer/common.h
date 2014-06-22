@@ -24,8 +24,5 @@ using namespace OpenRAVE;
 using namespace std;
 std::ofstream traj;
 
-
-
-
 #endif
 

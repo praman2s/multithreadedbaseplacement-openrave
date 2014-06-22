@@ -130,16 +130,18 @@ void DiscretizedPlacementOptimizer:: GetTrajectoryTime(EnvironmentBasePtr env, s
 		//initial config
 		probot->SetActiveDOFValues(vsolutionA);
 		params->vinitialconfig.resize(probot->GetActiveDOF());
-		probot->GetActiveDOFValues(params->vinitialconfig);
+		probot->GetActiveDOFValues( params->vinitialconfig );
+                probot->GetActiveDOFMaxVel( params->_vConfigVelocityLimit );
 
 		//goal config	
-		probot->SetActiveDOFValues(vsolutionB);
-		params->vgoalconfig.resize(probot->GetActiveDOF());
-		probot->GetActiveDOFValues(params->vgoalconfig);
+		probot->SetActiveDOFValues( vsolutionB );
+		params->vgoalconfig.resize( probot->GetActiveDOF() );
+		probot->GetActiveDOFValues( params->vgoalconfig );
 
 		//setting limits
 		vector<dReal> vlower,vupper;
-		probot->GetActiveDOFLimits(vlower,vupper);
+		probot->GetActiveDOFLimits(params->_vConfigLowerLimit,params->_vConfigUpperLimit);
+		
 
 		//RAVELOG_INFO("starting to plan\n");
 		
@@ -238,10 +240,13 @@ bool DiscretizedPlacementOptimizer :: OptimizeBase(){
 		
 	}
 	else{
-		//RAVELOG_INFO("Found %d threads to join \n",cnt);
+		//polling rather than to wait
 		for (unsigned int m=0; m < cnt; m++) {
+			if(_threadscollision[m]->joinable()){
 		            _threadscollision[m]->join();
 			    pclondedenv[m]->Destroy();
+			    break;
+			}
 			     
         	}
 		
@@ -294,11 +299,13 @@ bool DiscretizedPlacementOptimizer :: PlanningLoop (){
 		
 			}
 			else{
-				//RAVELOG_INFO("Found %d threads to join \n",cnt);
+				//polling rather than to wait
 				for (unsigned int m=0; m < cnt; m++) {
+					//if( vthreads[m]->joinable()){
 					    vthreads[m]->join();
 					    pclondedenv[m]->Destroy();
-					     
+					    //break;
+					 //}
 				}
 		
 				cnt = 0;
