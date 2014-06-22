@@ -39,7 +39,9 @@ int main(int argc, char *argv[])
     boost::shared_ptr<PlacementOptimizerBase> optimizer( new DiscretizedPlacementOptimizer(penv,defaultOptimizerData ));
     if (!!optimizer->OptimizeBase()) {
         _time = optimizer->GetOptimizedTime();
-        RAVELOG_INFO("The optimized time is %f \n",_time);
+	Transform t = optimizer->GetOptimizedPose();
+        std::cout << "Optimized Base Pose is : " << t << std::endl;
+        RAVELOG_INFO("The trajectory duration is %f . The trajectory file is saved as traj.xml\n",_time);
 
     } // should be called only after optimizebase
 

@@ -26,19 +26,20 @@ void DiscretizedPlacementOptimizer :: writePoseData(Transform T, std::vector< st
 
 }
 
-void DiscretizedPlacementOptimizer :: writeData(TrajectoryBasePtr ptraj, double time){
+void DiscretizedPlacementOptimizer :: writeData(TrajectoryBasePtr ptraj, EnvironmentBasePtr env){
 
     __mutex.lock();                     //could be replaced by scoped lock
     stringstream ss;
     if (!!(ptraj)) {
         //check if the trajectory is less than the stored trajectory
-        if (( ptraj->GetDuration() < time )) {
-            time = ptraj->GetDuration();
+        if (( ptraj->GetDuration() < _timeseconds )) {
+            _timeseconds = ptraj->GetDuration();
             ptraj->serialize(ss);
             traj.open("traj.xml");
             traj.clear();
             traj << ss.str();
             traj.close();
+	    _robotPose = env->GetRobot(_data->robotname)->GetTransform();
         }
         else {
             RAVELOG_INFO( "Ignoring Trajectory Files\n" );
@@ -107,6 +108,8 @@ bool DiscretizedPlacementOptimizer :: GetIKSolutions(EnvironmentBasePtr _penv, T
     return true;
 
 }
+
+/// Taken from OpenRAVE example
 void DiscretizedPlacementOptimizer:: GetTrajectoryTime(EnvironmentBasePtr env, std::vector<dReal> &vsolutionA, std::vector<dReal> &vsolutionB, TrajectoryBasePtr ptraj){
 
 
@@ -153,7 +156,9 @@ void DiscretizedPlacementOptimizer:: GetTrajectoryTime(EnvironmentBasePtr env, s
 
 		
 	}
-
+        if (!! ptraj){
+		writeData(ptraj,env);
+	}
 
 }
 
@@ -162,7 +167,7 @@ DiscretizedPlacementOptimizer:: DiscretizedPlacementOptimizer
     (EnvironmentBasePtr penv,boost::shared_ptr<PlacementOptimizerData> data) :
     _penv(penv->CloneSelf(Clone_Bodies)), // operates on cloned environment. Does not disturb the main environment
     _data(data){
-    _timemilliseconds = 100.0; // higher enough to let the first trajectory store into file
+    _timeseconds = 100.0; // higher enough to let the first trajectory store into file
     k_threads = 1;
     _probot = _penv->GetRobot(_data->robotname);
     
@@ -361,18 +366,11 @@ bool DiscretizedPlacementOptimizer :: MulithreadedPlanning(EnvironmentBasePtr en
 
 double DiscretizedPlacementOptimizer :: GetOptimizedTime () const {
 
-    return _timemilliseconds;
-
+    return _timeseconds;
 
 }
+
 Transform DiscretizedPlacementOptimizer :: GetOptimizedPose () const {
 
     return _robotPose;
-
 }
-
-
-
-
-
-

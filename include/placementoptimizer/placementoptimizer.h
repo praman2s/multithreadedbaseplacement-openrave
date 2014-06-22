@@ -181,7 +181,7 @@ private:
      void writePoseData(Transform T, std::vector< std::vector< dReal > > solnsA, std::vector< std::vector< dReal > > solnsB);
    
 
-    void writeData(TrajectoryBasePtr ptraj, double time);
+    void writeData(TrajectoryBasePtr ptraj, EnvironmentBasePtr env);
     /// Cloned Environment
     EnvironmentBasePtr _penv;
 
@@ -195,7 +195,7 @@ private:
     Transform _robotPose;
 
     // trajectory in seconds
-    double _timemilliseconds;
+    double _timeseconds;
 
     // mutable data
     void writeToResource(TrajectoryBasePtr ptraj);
