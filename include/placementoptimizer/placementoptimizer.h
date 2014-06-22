@@ -30,7 +30,7 @@ class PlacementOptimizerData :  boost::noncopyable   {
 public:
     /// Constructor with default values for initiailization
     PlacementOptimizerData(){
-        numThreads = 16;
+        numThreads = 2;
         points[0] = 0.3;
         points[1] = 0.3;
         points[2] = -0.3;
@@ -138,8 +138,9 @@ public:
      void  UpdateGrid();
 
 private:
+    /// managed threads	
+    vector<boost::shared_ptr<boost::thread> > _threads;   
 
-   
     /// mutex for shared resource
     mutable boost::mutex __mutex, _posemutex;
     

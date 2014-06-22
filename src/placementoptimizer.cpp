@@ -171,6 +171,7 @@ DiscretizedPlacementOptimizer:: DiscretizedPlacementOptimizer
     _data(data){
     _timeseconds = 100.0; // higher enough to let the first trajectory store into file
     k_threads = 1;
+   //_threads(_data->numThreads);
     _probot = _penv->GetRobot(_data->robotname);
     
 

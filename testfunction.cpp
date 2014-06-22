@@ -19,6 +19,7 @@ int processCommandLineParameters(int argc, char *argv[], EnvironmentBasePtr & en
 	("scene", po::value<string>(), "store scene file")
         ("robot", po::value<string>(), "Robot Name")
 	("manip", po::value<string>(), "Manipulator Name")
+        ("threads", po::value<unsigned int>(), "Number of threads")
     ;
 
     po::variables_map vm;
@@ -27,18 +28,21 @@ int processCommandLineParameters(int argc, char *argv[], EnvironmentBasePtr & en
 
     if (vm.count("help")) {
        cout << "executable " << " " << " --scene=scene file " << " --robot=robotname "
-	    << "--manip = manipulator name \n";
+	    << "--manip = manipulatorname \n";
        return 1;
     }  
-    if(argc !=4){
+    if(argc !=5){
 	cout << "Command line options are \n" << "executable " << " " << " --scene=scene file " << " --robot=robotname "
-	    << "--manip=manipulator name \n";
+	    << "--manip=manipulatorname "<< "--threads=number \n";
        return 1;
     }
     if (vm.count("scene")) {
 	scene =  vm["scene"].as<string>();
 	if (!env->Load( scene ))
 		RAVELOG_ERROR("Please provide a correct scene file\n");
+    }
+    if (vm.count("threads")) {
+	data->numThreads =  vm["threads"].as<unsigned int>();
     }
     if (vm.count("robot")) {
 	robotname =  vm["robot"].as<string>();
