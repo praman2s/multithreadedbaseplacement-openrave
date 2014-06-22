@@ -15,7 +15,7 @@ Compiling the code :
               
 To run the optimization :
 
-              ./build/testfunction --scene scene/testscene.env.xml
+              ./build/testfunction --scene=scenes/testscene.env.xml --robot=RV-4F --manip=1
               
               
 Results :
