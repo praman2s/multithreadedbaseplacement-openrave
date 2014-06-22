@@ -8,14 +8,63 @@ using namespace std;
 using namespace OpenRAVE;
 namespace po = boost::program_options;
 
-int processCommandLineParameters(int argc, char *argv[]){
+string scene, robotname, manipname;
 
+int processCommandLineParameters(int argc, char *argv[], EnvironmentBasePtr & env, boost::shared_ptr<PlacementOptimizerData> &data){
+    RobotBasePtr probot;
     // Declare the supported options.
     po::options_description desc("Allowed options");
     desc.add_options()
         ("help", "produce help message")
+	("scene", po::value<string>(), "store scene file")
+        ("robot", po::value<string>(), "Robot Name")
+	("manip", po::value<string>(), "Manipulator Name")
     ;
 
+    po::variables_map vm;
+    po::store(po::parse_command_line(argc, argv, desc), vm);
+    po::notify(vm);  
+
+    if (vm.count("help")) {
+       cout << "executable " << " " << " --scene=scene file " << " --robot=robotname "
+	    << "--manip = manipulator name \n";
+       return 1;
+    }  
+    if(argc !=4){
+	cout << "Command line options are \n" << "executable " << " " << " --scene=scene file " << " --robot=robotname "
+	    << "--manip=manipulator name \n";
+       return 1;
+    }
+    if (vm.count("scene")) {
+	scene =  vm["scene"].as<string>();
+	if (!env->Load( scene ))
+		RAVELOG_ERROR("Please provide a correct scene file\n");
+    }
+    if (vm.count("robot")) {
+	robotname =  vm["robot"].as<string>();
+	data->robotname = robotname; 
+	RobotBasePtr probot = env->GetRobot(robotname);
+	if(!probot){
+			RAVELOG_ERROR("Incorrect robot name\n");
+			return 1;
+	}
+	else {
+		if (vm.count("manip")) {
+			manipname =  vm["manip"].as<string>();
+			probot->SetActiveManipulator(manipname);
+			RobotBase::ManipulatorPtr _pmanip = probot->GetActiveManipulator();
+			if (!!_pmanip){
+				data->manipname = manipname;
+			}
+			else {
+				RAVELOG_ERROR("Incorrect manipulator name\n");
+				return 1;
+			}
+    		}
+
+	}
+    }
+    
     return 0;
 }
 
@@ -24,31 +73,28 @@ int processCommandLineParameters(int argc, char *argv[]){
 
 int main(int argc, char *argv[])
 {
-    boost::timer t;  // to measure optimization time
-    double _time;    // to store the time
-    // starting the normal OpenRAVE core
     RaveInitialize(true);
     EnvironmentBasePtr penv = RaveCreateEnvironment();
-    penv->Load( "scenes/testscene.env.xml" );
-
     // loading optimizer data for placement optimizer
     boost::shared_ptr<PlacementOptimizerData> defaultOptimizerData(new PlacementOptimizerData());
+    if (!processCommandLineParameters( argc, argv, penv, defaultOptimizerData)){  //process command line parameters
+	    boost::timer t;  // to measure optimization time
+	    double _time;    // to store the time
+	    //initiate the placement optimizer
+	    boost::shared_ptr<PlacementOptimizerBase> optimizer( new DiscretizedPlacementOptimizer(penv,defaultOptimizerData ));
+	    if (!!optimizer->OptimizeBase()) {
+		_time = optimizer->GetOptimizedTime();
+		Transform t = optimizer->GetOptimizedPose();
+		std::cout << "Optimized Base Pose is : " << t << std::endl;
+		RAVELOG_INFO("The trajectory duration is %f . The trajectory file is saved as traj.xml\n",_time);
 
+	    } // should be called only after optimizebase
 
-    //initiate the placement optimizer
-    boost::shared_ptr<PlacementOptimizerBase> optimizer( new DiscretizedPlacementOptimizer(penv,defaultOptimizerData ));
-    if (!!optimizer->OptimizeBase()) {
-        _time = optimizer->GetOptimizedTime();
-	Transform t = optimizer->GetOptimizedPose();
-        std::cout << "Optimized Base Pose is : " << t << std::endl;
-        RAVELOG_INFO("The trajectory duration is %f . The trajectory file is saved as traj.xml\n",_time);
-
-    } // should be called only after optimizebase
-
-    //resultant trajectory is always stored as traj.xml
-    double elapsed = t.elapsed();
-    RAVELOG_INFO("%f elapsed to optimize\n",elapsed); //display the elapsed time
-    std::cout << defaultOptimizerData->_allPoses.size() << std::endl;
+	    //resultant trajectory is always stored as traj.xml
+	    double elapsed = t.elapsed();
+	    RAVELOG_INFO("%f elapsed to optimize\n",elapsed); //display the elapsed time
+	    std::cout << defaultOptimizerData->_allPoses.size() << std::endl;
+    }
     RaveDestroy();
     return 0;
 }

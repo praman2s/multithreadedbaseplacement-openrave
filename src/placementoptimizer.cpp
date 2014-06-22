@@ -242,11 +242,11 @@ bool DiscretizedPlacementOptimizer :: OptimizeBase(){
 	else{
 		//polling rather than to wait
 		for (unsigned int m=0; m < cnt; m++) {
-			if(_threadscollision[m]->joinable()){
+			//if(_threadscollision[m]->joinable()){
 		            _threadscollision[m]->join();
 			    pclondedenv[m]->Destroy();
-			    break;
-			}
+			    //break;
+			//}
 			     
         	}
 		
