@@ -8,13 +8,15 @@
 #include <placementoptimizer/placementoptimizer.h>
 #include <boost/thread/mutex.hpp>
 
-void PlacementOptimizerData :: writePoseData(Transform T) {
-        
+void DiscretizedPlacementOptimizer :: writePoseData(Transform T, std::vector< std::vector< dReal > > solnsA, std::vector< std::vector< dReal > > solnsB) {
+        struct PoseMap Map;
+	Map.t = T;
+	Map.solnsA = solnsA;
+	Map.solnsB = solnsB;
 	//boost::lock<boost::mutex> scoped_lock(_posemutex);
 	if ( !!_posemutex.try_lock()){
-		std::cout << T.trans << std::endl;
-		_allPoses.push_back(T);
-		//std::cout << boost::this_thread::get_id() << " got mutex" << std::endl;
+		
+		_data->_ikPoses.push_back(Map);
 		_posemutex.unlock();
 	}
 	else{
@@ -24,7 +26,7 @@ void PlacementOptimizerData :: writePoseData(Transform T) {
 
 }
 
-void PlacementOptimizerData::writeData(TrajectoryBasePtr ptraj, double time){
+void DiscretizedPlacementOptimizer :: writeData(TrajectoryBasePtr ptraj, double time){
 
     __mutex.lock();                     //could be replaced by scoped lock
     stringstream ss;
@@ -52,18 +54,21 @@ void PlacementOptimizerData::writeData(TrajectoryBasePtr ptraj, double time){
 
 }
 
-void PlacementOptimizerData :: CheckNoCollisions(EnvironmentBasePtr pclondedenv, string ignoreBody){
+void DiscretizedPlacementOptimizer :: CheckNoCollisions(EnvironmentBasePtr pclondedenv){
 
     
-    
+    std::vector< std::vector< dReal > > vsolutionsA, vsolutionsB;
     //EnvironmentMutex::scoped_lock lock(env->GetMutex());
-    pclondedenv->Remove( pclondedenv->GetKinBody(ignoreBody));      // remove floor
-    RobotBasePtr probot_clone = pclondedenv->GetRobot(robotname);
-    Transform T = probot_clone->GetTransform();
-    //std::cout << T.trans << std::endl;
+    pclondedenv->Remove( pclondedenv->GetKinBody(_data->ignorebody));      // remove floor
+    RobotBasePtr probot_clone = pclondedenv->GetRobot(_data->robotname);
+  
     //check for environment collision
     if ( !pclondedenv->CheckCollision(RobotBaseConstPtr(probot_clone)) ){ 
-	writePoseData(probot_clone->GetTransform());
+	if (!!(GetIKSolutions(pclondedenv, _data->Tb, vsolutionsB) && GetIKSolutions(pclondedenv, _data->Ta,vsolutionsA))){
+
+		RAVELOG_INFO("Found solution for both base and goal\n");
+		writePoseData(probot_clone->GetTransform(), vsolutionsA, vsolutionsB);
+	}
 	
     }
     
@@ -72,55 +77,82 @@ void PlacementOptimizerData :: CheckNoCollisions(EnvironmentBasePtr pclondedenv,
 
 }
 
-void PlacementOptimizerData:: GetTrajectoryTime(EnvironmentBasePtr _penv, boost::shared_ptr<PlacementOptimizerData> _data, std::vector<dReal> &vsolutionA, std::vector<dReal> &vsolutionB, TrajectoryBasePtr &ptraj, double  &time){
+bool DiscretizedPlacementOptimizer :: GetIKSolutions(EnvironmentBasePtr _penv, Transform Pose, std::vector< std::vector< dReal > > &vsolution){
 
+    ModuleBasePtr _pikfast = RaveCreateModule(_penv,"ikfast");
+    RobotBasePtr _probot = _penv->GetRobot(_data->robotname);
+    _probot->SetActiveManipulator(_data->manipname);
+    RobotBase::ManipulatorPtr _pmanip = _probot->GetActiveManipulator();
+    _penv->Add(_pikfast,true,"");
+    std::vector< std::vector< dReal > > solns;
 
-    //std::cout << "This thread currently in operation" <<  boost::this_thread::get_id() << std::endl;
-    //EnvironmentBasePtr _penv = penv->CloneSelf(Clone_Bodies);
-    PlannerBasePtr planner = RaveCreatePlanner(_penv,"birrt");
-    ptraj = RaveCreateTrajectory(_penv,"");
-    PlannerBase::PlannerParametersPtr params(new PlannerBase::PlannerParameters());
-    RobotBasePtr probot = _penv->GetRobot(_data->robotname);
-    params->_nMaxIterations = 4000; // max iterations before failure
+    solns.resize(6);
+    stringstream ssin,ssout;
 
-    GraphHandlePtr pgraph;
-    {
-        EnvironmentMutex::scoped_lock lock(_penv->GetMutex()); // lock environment
-        params->SetRobotActiveJoints(probot); // set planning configuration space to current active dofs
-
-        //initial config
-        probot->SetActiveDOFValues(vsolutionA);
-        params->vinitialconfig.resize(probot->GetActiveDOF());
-        probot->GetActiveDOFValues(params->vinitialconfig);
-
-        //goal config
-        probot->SetActiveDOFValues(vsolutionB);
-        params->vgoalconfig.resize(probot->GetActiveDOF());
-        probot->GetActiveDOFValues(params->vgoalconfig);
-
-        //setting limits
-        vector<dReal> vlower,vupper;
-        probot->GetActiveDOFLimits(vlower,vupper);
-
-        //RAVELOG_INFO("starting to plan\n");
-
-        if( !planner->InitPlan(probot,params) ) {
-            //do nothing
-        }
-        // create a new output trajectory
-
-        if( !planner->PlanPath(ptraj) ) {
-            RAVELOG_WARN("plan failed \n");
-            // ptraj will be any ways empty
-
-        }
-
+    ssin << "LoadIKFastSolver " << _probot->GetName() << " " << _data->_iktype;
+    if( !_pikfast->SendCommand(ssout,ssin) ) {
+        RAVELOG_ERROR("failed to load iksolver\n");
+        _penv->Destroy();
+        return false;
     }
 
-    if (!!ptraj) {
-        writeData(ptraj,time);
+    if(_pmanip->FindIKSolutions(IkParameterization(Pose),vsolution,IKFO_CheckEnvCollisions) ) {
+
+        //continue. the function will return true
     }
-    //_penv->Destroy();
+    else {
+
+        return false;
+    }
+    return true;
+
+}
+void DiscretizedPlacementOptimizer:: GetTrajectoryTime(EnvironmentBasePtr env, std::vector<dReal> &vsolutionA, std::vector<dReal> &vsolutionB, TrajectoryBasePtr ptraj){
+
+
+        //thread::id get_id();
+	//std::cout << "this thread ::" << boost::this_thread::get_id() << std::endl;
+	PlannerBasePtr planner = RaveCreatePlanner(env,"birrt");
+	//std::vector<dReal> vinitialconfig,vgoalconfig;
+	ptraj = RaveCreateTrajectory(env,"");
+	PlannerBase::PlannerParametersPtr params(new PlannerBase::PlannerParameters());
+	RobotBasePtr probot = env->GetRobot(_data->robotname);
+	params->_nMaxIterations = 4000; // max iterations before failure
+
+	GraphHandlePtr pgraph;
+	{
+		EnvironmentMutex::scoped_lock lock(env->GetMutex()); // lock environment
+		params->SetRobotActiveJoints(probot); // set planning configuration space to current active dofs
+
+		//initial config
+		probot->SetActiveDOFValues(vsolutionA);
+		params->vinitialconfig.resize(probot->GetActiveDOF());
+		probot->GetActiveDOFValues(params->vinitialconfig);
+
+		//goal config	
+		probot->SetActiveDOFValues(vsolutionB);
+		params->vgoalconfig.resize(probot->GetActiveDOF());
+		probot->GetActiveDOFValues(params->vgoalconfig);
+
+		//setting limits
+		vector<dReal> vlower,vupper;
+		probot->GetActiveDOFLimits(vlower,vupper);
+
+		//RAVELOG_INFO("starting to plan\n");
+		
+		if( !planner->InitPlan(probot,params) ) {
+			//return ptraj;
+		}
+		// create a new output trajectory
+		
+		if( !planner->PlanPath(ptraj) ) {
+			RAVELOG_WARN("plan failed \n");
+			//return NULL;
+			
+		}
+
+		
+	}
 
 
 }
@@ -133,7 +165,7 @@ DiscretizedPlacementOptimizer:: DiscretizedPlacementOptimizer
     _timemilliseconds = 100.0; // higher enough to let the first trajectory store into file
     k_threads = 1;
     _probot = _penv->GetRobot(_data->robotname);
-    _iktype = "Transform6D";
+    
 
 }
 
@@ -142,7 +174,7 @@ DiscretizedPlacementOptimizer :: ~DiscretizedPlacementOptimizer(){
 
 }
 
-unsigned int DiscretizedPlacementOptimizer :: UpdateGrid(){
+void DiscretizedPlacementOptimizer :: UpdateGrid(){
 
     //Set robot to the extreme end
     Transform robot_t;
@@ -170,34 +202,32 @@ unsigned int DiscretizedPlacementOptimizer :: UpdateGrid(){
 	i++;
     }
     RAVELOG_INFO("Found %d grids to be evaluated for planning \n", gridMap.size());
-    return gridMap.size();
+    //return gridMap.size();
 
 
 }
+
+
 bool DiscretizedPlacementOptimizer :: OptimizeBase(){
 
     unsigned int cnt = 0, thread_cnt = _data->numThreads,  _thread_cnt = 0; //local count for threads
     std::vector< EnvironmentBasePtr > pclondedenv ( thread_cnt );
     RobotBasePtr probot_clone;
-    unsigned int gridSize = UpdateGrid();
+    UpdateGrid();
     RobotBasePtr robot;
    
     vector<boost::shared_ptr<boost::thread> > _threadscollision(thread_cnt);
 
     for (unsigned int i = 0; i < gridMap.size() ; ){
 	
-	 //clone body
-      
-	
-	//_data->CheckNoCollisions(_penv,_data->ignorebody);
 	if(cnt < thread_cnt){
 		pclondedenv[cnt] = _penv->CloneSelf(Clone_Bodies); 
 		probot_clone = pclondedenv[cnt]->GetRobot(_data->robotname);
 		probot_clone->SetTransform(gridMap[i]);
 		i = i+1;
-		//boost::this_thread::sleep(boost::posix_time::milliseconds(10));
-		_threadscollision[cnt].reset(new boost::thread(boost::bind(&PlacementOptimizerData:: CheckNoCollisions,_data, pclondedenv[cnt] , _data->ignorebody)));
-		
+		//_threadscollision[cnt].reset(new boost::thread(boost::bind(&DiscretizedPlacementOptimizer:: CheckNoCollisions,_data, pclondedenv[cnt] , _data->ignorebody))); 
+		 _threadscollision[cnt].reset(new boost::thread(boost::bind(&DiscretizedPlacementOptimizer :: CheckNoCollisions, this, pclondedenv[cnt])));
+		RAVELOG_INFO("%d / %d \n",i,gridMap.size());
 		cnt++;
 		_thread_cnt++;
 		
@@ -209,11 +239,10 @@ bool DiscretizedPlacementOptimizer :: OptimizeBase(){
 			    pclondedenv[m]->Destroy();
 			     
         	}
-		//boost::this_thread::sleep(boost::posix_time::milliseconds(100));
-		 // destroy the clone environment
+		
 		cnt = 0;
 		
-	   //i = i -1;
+	  
 
 	}
 	
@@ -222,7 +251,8 @@ bool DiscretizedPlacementOptimizer :: OptimizeBase(){
 		_threadscollision[m]->join();
         }
     
-    RAVELOG_INFO("GLOBAL COUNT %d  \n",_thread_cnt);
+    RAVELOG_INFO("Found %d base poses with no collision and corresponding IK solutions\n", _data->_ikPoses.size());
+    PlanningLoop ();
     return true; // always returns true if all the threads are complete
 
 }
@@ -230,47 +260,85 @@ bool DiscretizedPlacementOptimizer :: OptimizeBase(){
 
 
 
-bool DiscretizedPlacementOptimizer :: PlanningLoop (EnvironmentBasePtr env){
+bool DiscretizedPlacementOptimizer :: PlanningLoop (){
 
-    std::vector< std::vector< dReal > > vsolutionsA, vsolutionsB;
+    unsigned int cnt = 0, thread_cnt = _data->numThreads,  _thread_cnt = 0; //local count for threads
+    vector<boost::shared_ptr<boost::thread> > vthreads( thread_cnt ); //initiate threads for mulithreaded planning
+    std::vector< EnvironmentBasePtr > pclondedenv ( thread_cnt ); 
+    RobotBasePtr probot_clone;
+    Transform robot_t;
+    std::vector< std::vector< dReal > > vsolutionA, vsolutionB ;
     TrajectoryBasePtr ptraj;
+    
+   for (unsigned int i = 0; i < _data->_ikPoses.size(); i++){
+	    robot_t  = _data->_ikPoses[i].t;
+	    vsolutionA = _data->_ikPoses[i].solnsA;
+            vsolutionB = _data->_ikPoses[i].solnsB;
+	    std::cout << vsolutionA.size() << "," << vsolutionB.size() << std::endl;
+	for (unsigned int j = 0; j < vsolutionA.size(); j++) {
+		for (unsigned int k = 0; k < vsolutionB.size(); ) {
+			if(cnt < thread_cnt){
+				std::cout << j << "," << k << std::endl;
+				pclondedenv[cnt] = _penv->CloneSelf(Clone_Bodies); 
+				probot_clone = pclondedenv[cnt]->GetRobot(_data->robotname);
+				probot_clone->SetTransform(robot_t);
+				vthreads[cnt].reset(new boost::thread(boost::bind(&DiscretizedPlacementOptimizer :: GetTrajectoryTime, this, pclondedenv[cnt], vsolutionA[j], vsolutionB[k], ptraj)));
+		                k++;
+				cnt++;
+				_thread_cnt++;
+		
+			}
+			else{
+				//RAVELOG_INFO("Found %d threads to join \n",cnt);
+				for (unsigned int m=0; m < cnt; m++) {
+					    vthreads[m]->join();
+					    pclondedenv[m]->Destroy();
+					     
+				}
+		
+				cnt = 0;
+		
+			  
 
-    if (!!(GetIKSolutions(env, _data->Tb, vsolutionsB) && GetIKSolutions(env, _data->Ta,vsolutionsA))) {
-        MulithreadedPlanning(env, vsolutionsA, vsolutionsB ); // dedicate threads and hold the control over threads
+			}
+	
+		}
+	 }
+      	for (unsigned int m=0; m < cnt; m++) {
+		vthreads[m]->join();
+	}
 
-    }
-    else {
 
-        //RAVELOG_INFO("No IK solution found either for source or goal");
-    }
+  }
     return true;     // returns true after completion of all threads
 }
 
-bool DiscretizedPlacementOptimizer :: MulithreadedPlanning(EnvironmentBasePtr env, std::vector< std::vector< dReal > > vsolutionsA, std::vector< std::vector< dReal > > vsolutionsB){
 
-    unsigned int cnt = 0, thread_cnt = _data->numThreads,  _thread_cnt = 0; //local count for threads
+
+bool DiscretizedPlacementOptimizer :: MulithreadedPlanning(EnvironmentBasePtr env, std::vector< std::vector< dReal > > vsolutionsA, std::vector< std::vector< dReal > > vsolutionsB, unsigned int subThreads){
+
+    std::vector< EnvironmentBasePtr > pclondedenv ( subThreads );
+    
+    unsigned int cnt = 0, thread_cnt = subThreads,  _thread_cnt = 0; //local count for threads
     TrajectoryBasePtr ptraj;
     vector<boost::shared_ptr<boost::thread> > vthreads(thread_cnt); //initiate threads for mulithreaded planning
     for (unsigned int i = 0; i < vsolutionsA.size(); i++) {
-        for (unsigned int j = 0; j < vsolutionsB.size(); j++) {
+        for (unsigned int j = 0; j < vsolutionsB.size(); ) {
 
             if( cnt < thread_cnt ) {
-                vthreads[cnt].reset(new boost::thread(boost::bind(&PlacementOptimizerData:: GetTrajectoryTime,_data, _penv, _data, vsolutionsA[i], vsolutionsB[j],ptraj, _timemilliseconds)));
+		pclondedenv[cnt] = _penv->CloneSelf(Clone_Bodies); 
+                vthreads[cnt].reset(new boost::thread(boost::bind(&DiscretizedPlacementOptimizer :: GetTrajectoryTime, this, pclondedenv[cnt], vsolutionsA[i], vsolutionsB[j], ptraj)));
+		j = j+1;
                 cnt++;
                 _thread_cnt++;
-                continue;
+                
             }
             else {
                 for (unsigned int k=0; k < cnt; k++) {
-                    if (!!vthreads[k]->joinable())
-                    {
-                        _thread_cnt--;
-                        vthreads[k]->join();
-                        continue;
-                    }
+                     vthreads[k]->join();
+		     pclondedenv[k]->Destroy();
 
                 }
-                j--;
                 cnt = 0;
             }
         }
@@ -303,35 +371,7 @@ Transform DiscretizedPlacementOptimizer :: GetOptimizedPose () const {
 
 }
 
-bool DiscretizedPlacementOptimizer :: GetIKSolutions(EnvironmentBasePtr _penv, Transform Pose, std::vector< std::vector< dReal > > &vsolution){
 
-    ModuleBasePtr _pikfast = RaveCreateModule(_penv,"ikfast");
-    RobotBasePtr _probot = _penv->GetRobot(_data->robotname);
-    _probot->SetActiveManipulator("1");
-    RobotBase::ManipulatorPtr _pmanip = _probot->GetActiveManipulator();
-    _penv->Add(_pikfast,true,"");
-    std::vector< std::vector< dReal > > solns;
-
-    solns.resize(6);
-    stringstream ssin,ssout;
-
-    ssin << "LoadIKFastSolver " << _probot->GetName() << " " << _iktype;
-    if( !_pikfast->SendCommand(ssout,ssin) ) {
-        RAVELOG_ERROR("failed to load iksolver\n");
-        _penv->Destroy();
-        return false;
-    }
-
-    if(_pmanip->FindIKSolutions(IkParameterization(Pose),vsolution,IKFO_CheckEnvCollisions) ) {
-
-        //continue. the function will return true
-    }
-    else {
-
-        return false;
-    }
-    return true;
-}
 
 
 

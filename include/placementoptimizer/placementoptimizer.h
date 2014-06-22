@@ -11,6 +11,16 @@
 #include <boost/noncopyable.hpp>
 
 
+struct PoseMap {
+
+	Transform t;
+	std::vector< std::vector< dReal > > solnsA;
+	std::vector< std::vector< dReal > > solnsB;
+
+};
+
+
+
 /////////////////////////////////////////////////////////////////////////////////
 /// Data Storage for PlacementOptimizerBase . Contains Default Values
 /////////////////////////////////////////////////////////////////////////////////
@@ -20,7 +30,7 @@ class PlacementOptimizerData :  boost::noncopyable   {
 public:
     /// Constructor with default values for initiailization
     PlacementOptimizerData(){
-        numThreads = 4;
+        numThreads = 16;
         points[0] = 0.3;
         points[1] = 0.3;
         points[2] = -0.3;
@@ -37,28 +47,19 @@ public:
         discretization_x = 0.05;
         discretization_y = 0.05;
         discretization_z = 0.1;
+        _iktype = "Transform6D";   /// MANDATORY TO SET AS 6D TRANSFORM
 
     };
 
     /// Default destructor
     virtual ~PlacementOptimizerData(){
     };
-    void writeData(TrajectoryBasePtr ptraj, double time);
+    
     
     
 
-    /// \brief Performs the actual planning on the cloned environment.
-    ///        No loop should be performed. Since multithreaded, each time this function is called, environment
-    ///        will be cloned internally to the member function
-    /// \param Environment and vector of solutions for both Pose A and B
-    /// \return If called after optimizebase, returns the optimized time
-    void GetTrajectoryTime(EnvironmentBasePtr _penv, boost::shared_ptr<PlacementOptimizerData> _data, std::vector<dReal> &vsolutionA, std::vector<dReal> &vsolutionB, TrajectoryBasePtr &ptraj, double  &time);
+   
 
-    /// \brief Performs if the robot collides with any object in the internally cloned environment.
-    /// \param EnvironmentBasePtr Environment that needs to be checked
-    /// \param string Bodies like floor can be ignored
-    /// \return bool returns true if no collision occured
-    void CheckNoCollisions(EnvironmentBasePtr env, string ignoreBody);
 	
     /// number of threads
     unsigned int numThreads;
@@ -80,13 +81,14 @@ public:
     float discretization_z;
     /// All robot poses where robot is not suffering from collision
     std::vector < Transform > _allPoses;
+    std::vector < PoseMap > _ikPoses;
+    string _iktype;
    
 
-private:
-    /// mutex for shared resource
-    mutable boost::mutex __mutex, _posemutex;
-    /// internal memeber function to write pose data
-    void writePoseData(Transform T);
+
+   
+
+    
 	
 };
 
@@ -133,16 +135,20 @@ public:
     /// \return If called after optimizebase, returns the optimized pose
     Transform GetOptimizedPose () const;
 
+     void  UpdateGrid();
+
 private:
 
-
-    /// \brief Performs the actual planning on the cloned environment.
-    ///        No loop should be performed. Since multithreaded, each time this function is called, environment
-    ///        will be cloned internally to the member function
-    /// \param EnvironmentBasePtr and vector of solutions for both Pose A and B
-    /// \return If called after optimizebase, returns the optimized time
-    bool GetIKSolutions(EnvironmentBasePtr _penv, Transform Pose, std::vector< std::vector< dReal > > &vsolution);
-
+   
+    /// mutex for shared resource
+    mutable boost::mutex __mutex, _posemutex;
+    
+    
+    /// \brief Performs if the robot collides with any object in the internally cloned environment.
+    /// \param EnvironmentBasePtr Environment that needs to be checked
+    /// \param string Bodies like floor can be ignored
+    /// \return bool returns true if no collision occured
+    void CheckNoCollisions(EnvironmentBasePtr env);
     
 
     /// \brief Multithreaded Trajectory generation from Pt A to Pt B with differnt IK solutions.
@@ -150,15 +156,32 @@ private:
     /// \param std::vector< std::vector< dReal > > Pt A solutions
     /// \param std::vector< std::vector< dReal > > Pt B solutions
     /// \return bool returns true if mulithreading is complete i.e all threads are joined
-    bool MulithreadedPlanning(EnvironmentBasePtr env, std::vector< std::vector< dReal > > vsolutionsA, std::vector< std::vector< dReal > > vsolutionsB);
+    bool MulithreadedPlanning(EnvironmentBasePtr env, std::vector< std::vector< dReal > > vsolutionsA, std::vector< std::vector< dReal > > vsolutionsB, unsigned int subThreads);
 
     /// \brief Multithreaded Trajectory generation from Pt A to Pt B with differnt IK solutions.
     /// \param EnvironmentBasePtr environment under which planning loop is performed
     /// \return bool returns true if planning loop is performed
-    bool PlanningLoop (EnvironmentBasePtr env);
+    bool PlanningLoop ();
 
-    unsigned int  UpdateGrid();
+    /// \brief Performs the actual planning on the cloned environment.
+    ///        No loop should be performed. Since multithreaded, each time this function is called, environment
+    ///        will be cloned internally to the member function
+    /// \param Environment and vector of solutions for both Pose A and B
+    /// \return If called after optimizebase, returns the optimized time
+    void GetTrajectoryTime(EnvironmentBasePtr _penv, std::vector<dReal> &vsolutionA, std::vector<dReal> &vsolutionB, TrajectoryBasePtr ptraj);
 
+
+   /// \brief Performs the actual planning on the cloned environment.
+    ///        No loop should be performed. Since multithreaded, each time this function is called, environment
+    ///        will be cloned internally to the member function
+    /// \param EnvironmentBasePtr and vector of solutions for both Pose A and B
+    /// \return If called after optimizebase, returns the optimized time
+    bool GetIKSolutions(EnvironmentBasePtr _penv, Transform Pose, std::vector< std::vector< dReal > > &vsolution);
+
+     void writePoseData(Transform T, std::vector< std::vector< dReal > > solnsA, std::vector< std::vector< dReal > > solnsB);
+   
+
+    void writeData(TrajectoryBasePtr ptraj, double time);
     /// Cloned Environment
     EnvironmentBasePtr _penv;
 
@@ -183,13 +206,12 @@ private:
     // threads left
     size_t k_threads;
     /// Currently supports only 6D IK
-    string _iktype;
+   
     boost::mutex _mutex;
     std::vector< Transform > gridMap;
 
 
 };
-
 
 
 #endif
