@@ -78,7 +78,6 @@ int main(int argc, char *argv[])
     // loading optimizer data for placement optimizer
     boost::shared_ptr<PlacementOptimizerData> defaultOptimizerData(new PlacementOptimizerData());
     if (!processCommandLineParameters( argc, argv, penv, defaultOptimizerData)){  //process command line parameters
-	    boost::timer t;  // to measure optimization time
 	    double _time;    // to store the time
 	    //initiate the placement optimizer
 	    boost::shared_ptr<PlacementOptimizerBase> optimizer( new DiscretizedPlacementOptimizer(penv,defaultOptimizerData ));
@@ -89,11 +88,6 @@ int main(int argc, char *argv[])
 		RAVELOG_INFO("The trajectory duration is %f . The trajectory file is saved as traj.xml\n",_time);
 
 	    } // should be called only after optimizebase
-
-	    //resultant trajectory is always stored as traj.xml
-	    double elapsed = t.elapsed();
-	    RAVELOG_INFO("%f elapsed to optimize\n",elapsed); //display the elapsed time
-	    std::cout << defaultOptimizerData->_allPoses.size() << std::endl;
     }
     RaveDestroy();
     return 0;
