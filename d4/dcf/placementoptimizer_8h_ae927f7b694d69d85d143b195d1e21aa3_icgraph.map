@@ -1,5 +1,0 @@
-<map id="GetDefaultTaskTime" name="GetDefaultTaskTime">
-<area shape="rect" id="node2" href="$da/d4d/class_discretized_placement_optimizer.html#ab2db84c9b11689ec1eb3b364c4c5a6c9" title="DiscretizedPlacementOptimizer\l::MulithreadedPlanning" alt="" coords="197,5,400,46"/>
-<area shape="rect" id="node3" href="$da/d4d/class_discretized_placement_optimizer.html#a3069944956249e888409dbc0f3300e08" title="DiscretizedPlacementOptimizer\l::PlanningLoop" alt="" coords="448,5,651,46"/>
-<area shape="rect" id="node4" href="$da/d4d/class_discretized_placement_optimizer.html#a3441419dedc58e6d618fd8886a2dc3f9" title="The main function which needs to be called for base optimization. " alt="" coords="699,5,901,46"/>
-</map>

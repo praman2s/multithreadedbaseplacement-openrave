@@ -92,7 +92,7 @@ $(document).ready(function(){initNavTree('da/d4d/class_discretized_placement_opt
      onmouseover="return searchBox.OnSearchSelectShow()"
      onmouseout="return searchBox.OnSearchSelectHide()"
      onkeydown="return searchBox.OnSearchSelectKey(event)">
-<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&#160;</span>All</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&#160;</span>Data Structures</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(2)"><span class="SelectionMark">&#160;</span>Files</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(3)"><span class="SelectionMark">&#160;</span>Functions</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(4)"><span class="SelectionMark">&#160;</span>Variables</a></div>
+<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&#160;</span>All</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&#160;</span>Data Structures</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(2)"><span class="SelectionMark">&#160;</span>Namespaces</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(3)"><span class="SelectionMark">&#160;</span>Files</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(4)"><span class="SelectionMark">&#160;</span>Functions</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(5)"><span class="SelectionMark">&#160;</span>Variables</a></div>
 
 <!-- iframe showing the search results (closed by default) -->
 <div id="MSearchResultsWindow">
@@ -140,26 +140,43 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a2f2606b0111f5e4b4d55c3a86cafc8d4"><td class="memItemLeft" align="right" valign="top">Transform&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../da/d4d/class_discretized_placement_optimizer.html#a2f2606b0111f5e4b4d55c3a86cafc8d4">GetOptimizedPose</a> () const </td></tr>
 <tr class="memdesc:a2f2606b0111f5e4b4d55c3a86cafc8d4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Function returns the optimized time w.r.t pose.  <a href="#a2f2606b0111f5e4b4d55c3a86cafc8d4">More...</a><br/></td></tr>
 <tr class="separator:a2f2606b0111f5e4b4d55c3a86cafc8d4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aba78e196413b2018d6e445c6275a5721"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../da/d4d/class_discretized_placement_optimizer.html#aba78e196413b2018d6e445c6275a5721">UpdateGrid</a> ()</td></tr>
+<tr class="separator:aba78e196413b2018d6e445c6275a5721"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="inherit_header pub_methods_class_placement_optimizer_base"><td colspan="2" onclick="javascript:toggleInherit('pub_methods_class_placement_optimizer_base')"><img src="../../closed.png" alt="-"/>&#160;Public Member Functions inherited from <a class="el" href="../../d0/df4/class_placement_optimizer_base.html">PlacementOptimizerBase</a></td></tr>
 <tr class="memitem:ab2eab960b6d16c9818854983647e3270 inherit pub_methods_class_placement_optimizer_base"><td class="memItemLeft" align="right" valign="top">virtual&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d0/df4/class_placement_optimizer_base.html#ab2eab960b6d16c9818854983647e3270">~PlacementOptimizerBase</a> ()</td></tr>
 <tr class="separator:ab2eab960b6d16c9818854983647e3270 inherit pub_methods_class_placement_optimizer_base"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-methods"></a>
 Private Member Functions</h2></td></tr>
+<tr class="memitem:a2cf46aa74e15588e4f1cb6eae3fb2072"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../da/d4d/class_discretized_placement_optimizer.html#a2cf46aa74e15588e4f1cb6eae3fb2072">CheckNoCollisions</a> (EnvironmentBasePtr env)</td></tr>
+<tr class="memdesc:a2cf46aa74e15588e4f1cb6eae3fb2072"><td class="mdescLeft">&#160;</td><td class="mdescRight">Performs if the robot collides with any object in the internally cloned environment.  <a href="#a2cf46aa74e15588e4f1cb6eae3fb2072">More...</a><br/></td></tr>
+<tr class="separator:a2cf46aa74e15588e4f1cb6eae3fb2072"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad3bb0b336b32e5000635a4be031303c1"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../da/d4d/class_discretized_placement_optimizer.html#ad3bb0b336b32e5000635a4be031303c1">MulithreadedPlanning</a> (EnvironmentBasePtr env, std::vector&lt; std::vector&lt; dReal &gt; &gt; vsolutionsA, std::vector&lt; std::vector&lt; dReal &gt; &gt; vsolutionsB, unsigned int subThreads)</td></tr>
+<tr class="memdesc:ad3bb0b336b32e5000635a4be031303c1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Multithreaded Trajectory generation from Pt A to Pt B with differnt IK solutions.  <a href="#ad3bb0b336b32e5000635a4be031303c1">More...</a><br/></td></tr>
+<tr class="separator:ad3bb0b336b32e5000635a4be031303c1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a855f55aa4cea5cf4c70fe956a021722c"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../da/d4d/class_discretized_placement_optimizer.html#a855f55aa4cea5cf4c70fe956a021722c">PlanningLoop</a> ()</td></tr>
+<tr class="memdesc:a855f55aa4cea5cf4c70fe956a021722c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Multithreaded Trajectory generation from Pt A to Pt B with differnt IK solutions.  <a href="#a855f55aa4cea5cf4c70fe956a021722c">More...</a><br/></td></tr>
+<tr class="separator:a855f55aa4cea5cf4c70fe956a021722c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a702917e22ac138fc85b17b20abe558f3"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../da/d4d/class_discretized_placement_optimizer.html#a702917e22ac138fc85b17b20abe558f3">GetTrajectoryTime</a> (EnvironmentBasePtr <a class="el" href="../../da/d4d/class_discretized_placement_optimizer.html#a021687bd8acf4d1ddec3d15d1ff9b97f">_penv</a>, std::vector&lt; dReal &gt; &amp;vsolutionA, std::vector&lt; dReal &gt; &amp;vsolutionB, TrajectoryBasePtr ptraj)</td></tr>
+<tr class="memdesc:a702917e22ac138fc85b17b20abe558f3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Performs the actual planning on the cloned environment.  <a href="#a702917e22ac138fc85b17b20abe558f3">More...</a><br/></td></tr>
+<tr class="separator:a702917e22ac138fc85b17b20abe558f3"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac887e7037dd60f0aa546b9021db48735"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../da/d4d/class_discretized_placement_optimizer.html#ac887e7037dd60f0aa546b9021db48735">GetIKSolutions</a> (EnvironmentBasePtr <a class="el" href="../../da/d4d/class_discretized_placement_optimizer.html#a021687bd8acf4d1ddec3d15d1ff9b97f">_penv</a>, Transform Pose, std::vector&lt; std::vector&lt; dReal &gt; &gt; &amp;vsolution)</td></tr>
 <tr class="memdesc:ac887e7037dd60f0aa546b9021db48735"><td class="mdescLeft">&#160;</td><td class="mdescRight">Performs the actual planning on the cloned environment.  <a href="#ac887e7037dd60f0aa546b9021db48735">More...</a><br/></td></tr>
 <tr class="separator:ac887e7037dd60f0aa546b9021db48735"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab2db84c9b11689ec1eb3b364c4c5a6c9"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../da/d4d/class_discretized_placement_optimizer.html#ab2db84c9b11689ec1eb3b364c4c5a6c9">MulithreadedPlanning</a> (EnvironmentBasePtr env, std::vector&lt; std::vector&lt; dReal &gt; &gt; vsolutionsA, std::vector&lt; std::vector&lt; dReal &gt; &gt; vsolutionsB)</td></tr>
-<tr class="memdesc:ab2db84c9b11689ec1eb3b364c4c5a6c9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Multithreaded Trajectory generation from Pt A to Pt B with differnt IK solutions.  <a href="#ab2db84c9b11689ec1eb3b364c4c5a6c9">More...</a><br/></td></tr>
-<tr class="separator:ab2db84c9b11689ec1eb3b364c4c5a6c9"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a3069944956249e888409dbc0f3300e08"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../da/d4d/class_discretized_placement_optimizer.html#a3069944956249e888409dbc0f3300e08">PlanningLoop</a> (EnvironmentBasePtr env)</td></tr>
-<tr class="memdesc:a3069944956249e888409dbc0f3300e08"><td class="mdescLeft">&#160;</td><td class="mdescRight">Multithreaded Trajectory generation from Pt A to Pt B with differnt IK solutions.  <a href="#a3069944956249e888409dbc0f3300e08">More...</a><br/></td></tr>
-<tr class="separator:a3069944956249e888409dbc0f3300e08"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae75d036c4c16ce6f3d748e86cb459506"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../da/d4d/class_discretized_placement_optimizer.html#ae75d036c4c16ce6f3d748e86cb459506">writePoseData</a> (Transform T, std::vector&lt; std::vector&lt; dReal &gt; &gt; solnsA, std::vector&lt; std::vector&lt; dReal &gt; &gt; solnsB)</td></tr>
+<tr class="separator:ae75d036c4c16ce6f3d748e86cb459506"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:afc2ba10213882717dd14eda1ca762dc1"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../da/d4d/class_discretized_placement_optimizer.html#afc2ba10213882717dd14eda1ca762dc1">writeData</a> (TrajectoryBasePtr ptraj, EnvironmentBasePtr env)</td></tr>
+<tr class="separator:afc2ba10213882717dd14eda1ca762dc1"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a91b561323aaf05bd8e73cf0ec741b7bf"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../da/d4d/class_discretized_placement_optimizer.html#a91b561323aaf05bd8e73cf0ec741b7bf">writeToResource</a> (TrajectoryBasePtr ptraj)</td></tr>
 <tr class="separator:a91b561323aaf05bd8e73cf0ec741b7bf"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-attribs"></a>
 Private Attributes</h2></td></tr>
+<tr class="memitem:a55b3630a552de782f06944f1feefbe10"><td class="memItemLeft" align="right" valign="top">boost::mutex&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../da/d4d/class_discretized_placement_optimizer.html#a55b3630a552de782f06944f1feefbe10">__mutex</a></td></tr>
+<tr class="memdesc:a55b3630a552de782f06944f1feefbe10"><td class="mdescLeft">&#160;</td><td class="mdescRight">mutex for shared resource  <a href="#a55b3630a552de782f06944f1feefbe10">More...</a><br/></td></tr>
+<tr class="separator:a55b3630a552de782f06944f1feefbe10"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab77667bd2d7d1ea824f10c841167a3ff"><td class="memItemLeft" align="right" valign="top">boost::mutex&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../da/d4d/class_discretized_placement_optimizer.html#ab77667bd2d7d1ea824f10c841167a3ff">_posemutex</a></td></tr>
+<tr class="separator:ab77667bd2d7d1ea824f10c841167a3ff"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a021687bd8acf4d1ddec3d15d1ff9b97f"><td class="memItemLeft" align="right" valign="top">EnvironmentBasePtr&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../da/d4d/class_discretized_placement_optimizer.html#a021687bd8acf4d1ddec3d15d1ff9b97f">_penv</a></td></tr>
 <tr class="memdesc:a021687bd8acf4d1ddec3d15d1ff9b97f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Cloned Environment.  <a href="#a021687bd8acf4d1ddec3d15d1ff9b97f">More...</a><br/></td></tr>
 <tr class="separator:a021687bd8acf4d1ddec3d15d1ff9b97f"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -173,22 +190,22 @@ Private Attributes</h2></td></tr>
 <tr class="memitem:adbf5e31f766e28e89879bef547b4e661"><td class="memItemLeft" align="right" valign="top">Transform&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../da/d4d/class_discretized_placement_optimizer.html#adbf5e31f766e28e89879bef547b4e661">_robotPose</a></td></tr>
 <tr class="memdesc:adbf5e31f766e28e89879bef547b4e661"><td class="mdescLeft">&#160;</td><td class="mdescRight">output robot pose. stored as result  <a href="#adbf5e31f766e28e89879bef547b4e661">More...</a><br/></td></tr>
 <tr class="separator:adbf5e31f766e28e89879bef547b4e661"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a27fd650fdfe1430325c440fbdd3cc25a"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../da/d4d/class_discretized_placement_optimizer.html#a27fd650fdfe1430325c440fbdd3cc25a">_timemilliseconds</a></td></tr>
-<tr class="separator:a27fd650fdfe1430325c440fbdd3cc25a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aeb05e57426afb713bcf37d6554b5331e"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../da/d4d/class_discretized_placement_optimizer.html#aeb05e57426afb713bcf37d6554b5331e">_timeseconds</a></td></tr>
+<tr class="separator:aeb05e57426afb713bcf37d6554b5331e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a868b42fe9b88bea51e0729c6426d02ae"><td class="memItemLeft" align="right" valign="top">std::ofstream&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../da/d4d/class_discretized_placement_optimizer.html#a868b42fe9b88bea51e0729c6426d02ae">traj</a></td></tr>
 <tr class="separator:a868b42fe9b88bea51e0729c6426d02ae"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a11a802e7fef987002b55da5712f7de54"><td class="memItemLeft" align="right" valign="top">size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../da/d4d/class_discretized_placement_optimizer.html#a11a802e7fef987002b55da5712f7de54">k_threads</a></td></tr>
 <tr class="separator:a11a802e7fef987002b55da5712f7de54"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:af0e5d3d9a8842161cef82a9584234463"><td class="memItemLeft" align="right" valign="top">string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../da/d4d/class_discretized_placement_optimizer.html#af0e5d3d9a8842161cef82a9584234463">_iktype</a></td></tr>
-<tr class="memdesc:af0e5d3d9a8842161cef82a9584234463"><td class="mdescLeft">&#160;</td><td class="mdescRight">Currently supports only 6D IK.  <a href="#af0e5d3d9a8842161cef82a9584234463">More...</a><br/></td></tr>
-<tr class="separator:af0e5d3d9a8842161cef82a9584234463"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:abf18812ae19b048af3f11234e0bf605c"><td class="memItemLeft" align="right" valign="top">boost::mutex&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../da/d4d/class_discretized_placement_optimizer.html#abf18812ae19b048af3f11234e0bf605c">_mutex</a></td></tr>
+<tr class="memdesc:abf18812ae19b048af3f11234e0bf605c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Currently supports only 6D IK.  <a href="#abf18812ae19b048af3f11234e0bf605c">More...</a><br/></td></tr>
 <tr class="separator:abf18812ae19b048af3f11234e0bf605c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:abfdc5bcbd54896349fc9929498a6d289"><td class="memItemLeft" align="right" valign="top">std::vector&lt; Transform &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../da/d4d/class_discretized_placement_optimizer.html#abfdc5bcbd54896349fc9929498a6d289">gridMap</a></td></tr>
+<tr class="separator:abfdc5bcbd54896349fc9929498a6d289"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Concrete Implementation fo <a class="el" href="../../d0/df4/class_placement_optimizer_base.html" title="Optimizes the position of the base to move manipulator from A to B w.r.t time. ">PlacementOptimizerBase</a> class. </p>
 
-<p>Definition at line <a class="el" href="../../d4/dcf/placementoptimizer_8h_source.html#l00108">108</a> of file <a class="el" href="../../d4/dcf/placementoptimizer_8h_source.html">placementoptimizer.h</a>.</p>
+<p>Definition at line <a class="el" href="../../d4/dcf/placementoptimizer_8h_source.html#l00117">117</a> of file <a class="el" href="../../d4/dcf/placementoptimizer_8h_source.html">placementoptimizer.h</a>.</p>
 </div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a class="anchor" id="a24a8d1b448a92c608909dd9160f67978"></a>
 <div class="memitem">
@@ -214,7 +231,7 @@ Private Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="../../da/dab/placementoptimizer_8cpp_source.html#l00112">112</a> of file <a class="el" href="../../da/dab/placementoptimizer_8cpp_source.html">placementoptimizer.cpp</a>.</p>
+<p>Definition at line <a class="el" href="../../da/dab/placementoptimizer_8cpp_source.html#l00169">169</a> of file <a class="el" href="../../da/dab/placementoptimizer_8cpp_source.html">placementoptimizer.cpp</a>.</p>
 
 </div>
 </div>
@@ -239,11 +256,69 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="../../da/dab/placementoptimizer_8cpp_source.html#l00122">122</a> of file <a class="el" href="../../da/dab/placementoptimizer_8cpp_source.html">placementoptimizer.cpp</a>.</p>
+<p>Definition at line <a class="el" href="../../da/dab/placementoptimizer_8cpp_source.html#l00179">179</a> of file <a class="el" href="../../da/dab/placementoptimizer_8cpp_source.html">placementoptimizer.cpp</a>.</p>
 
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
+<a class="anchor" id="a2cf46aa74e15588e4f1cb6eae3fb2072"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void CheckNoCollisions </td>
+          <td>(</td>
+          <td class="paramtype">EnvironmentBasePtr&#160;</td>
+          <td class="paramname"><em>env</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Performs if the robot collides with any object in the internally cloned environment. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">EnvironmentBasePtr</td><td>Environment that needs to be checked </td></tr>
+    <tr><td class="paramname">string</td><td>Bodies like floor can be ignored </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>bool returns true if no collision occured </dd></dl>
+
+<p>Definition at line <a class="el" href="../../da/dab/placementoptimizer_8cpp_source.html#l00058">58</a> of file <a class="el" href="../../da/dab/placementoptimizer_8cpp_source.html">placementoptimizer.cpp</a>.</p>
+
+<p><div id="dynsection-1" onclick="return toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
+  <img id="dynsection-1-trigger" src="../../closed.png" alt="+"/> Here is the call graph for this function:</div>
+<div id="dynsection-1-summary" class="dynsummary" style="display:block;">
+</div>
+<div id="dynsection-1-content" class="dyncontent" style="display:none;">
+<div class="center"><img src="../../da/d4d/class_discretized_placement_optimizer_a2cf46aa74e15588e4f1cb6eae3fb2072_cgraph.png" border="0" usemap="#da/d4d/class_discretized_placement_optimizer_a2cf46aa74e15588e4f1cb6eae3fb2072_cgraph" alt=""/></div>
+<map name="da/d4d/class_discretized_placement_optimizer_a2cf46aa74e15588e4f1cb6eae3fb2072_cgraph" id="da/d4d/class_discretized_placement_optimizer_a2cf46aa74e15588e4f1cb6eae3fb2072_cgraph">
+<area shape="rect" id="node2" href="../../da/d4d/class_discretized_placement_optimizer.html#ac887e7037dd60f0aa546b9021db48735" title="Performs the actual planning on the cloned environment. " alt="" coords="187,5,298,32"/><area shape="rect" id="node3" href="../../da/d4d/class_discretized_placement_optimizer.html#ae75d036c4c16ce6f3d748e86cb459506" title="writePoseData" alt="" coords="189,56,296,83"/></map>
+</div>
+</p>
+
+<p><div id="dynsection-2" onclick="return toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
+  <img id="dynsection-2-trigger" src="../../closed.png" alt="+"/> Here is the caller graph for this function:</div>
+<div id="dynsection-2-summary" class="dynsummary" style="display:block;">
+</div>
+<div id="dynsection-2-content" class="dyncontent" style="display:none;">
+<div class="center"><img src="../../da/d4d/class_discretized_placement_optimizer_a2cf46aa74e15588e4f1cb6eae3fb2072_icgraph.png" border="0" usemap="#da/d4d/class_discretized_placement_optimizer_a2cf46aa74e15588e4f1cb6eae3fb2072_icgraph" alt=""/></div>
+<map name="da/d4d/class_discretized_placement_optimizer_a2cf46aa74e15588e4f1cb6eae3fb2072_icgraph" id="da/d4d/class_discretized_placement_optimizer_a2cf46aa74e15588e4f1cb6eae3fb2072_icgraph">
+<area shape="rect" id="node2" href="../../da/d4d/class_discretized_placement_optimizer.html#a3441419dedc58e6d618fd8886a2dc3f9" title="The main function which needs to be called for base optimization. " alt="" coords="187,5,290,32"/></map>
+</div>
+</p>
+
+</div>
+</div>
 <a class="anchor" id="ac887e7037dd60f0aa546b9021db48735"></a>
 <div class="memitem">
 <div class="memproto">
@@ -292,16 +367,16 @@ Private Attributes</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>If called after optimizebase, returns the optimized time </dd></dl>
 
-<p>Definition at line <a class="el" href="../../da/dab/placementoptimizer_8cpp_source.html#l00282">282</a> of file <a class="el" href="../../da/dab/placementoptimizer_8cpp_source.html">placementoptimizer.cpp</a>.</p>
+<p>Definition at line <a class="el" href="../../da/dab/placementoptimizer_8cpp_source.html#l00081">81</a> of file <a class="el" href="../../da/dab/placementoptimizer_8cpp_source.html">placementoptimizer.cpp</a>.</p>
 
-<p><div id="dynsection-1" onclick="return toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
-  <img id="dynsection-1-trigger" src="../../closed.png" alt="+"/> Here is the caller graph for this function:</div>
-<div id="dynsection-1-summary" class="dynsummary" style="display:block;">
+<p><div id="dynsection-3" onclick="return toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
+  <img id="dynsection-3-trigger" src="../../closed.png" alt="+"/> Here is the caller graph for this function:</div>
+<div id="dynsection-3-summary" class="dynsummary" style="display:block;">
 </div>
-<div id="dynsection-1-content" class="dyncontent" style="display:none;">
+<div id="dynsection-3-content" class="dyncontent" style="display:none;">
 <div class="center"><img src="../../da/d4d/class_discretized_placement_optimizer_ac887e7037dd60f0aa546b9021db48735_icgraph.png" border="0" usemap="#da/d4d/class_discretized_placement_optimizer_ac887e7037dd60f0aa546b9021db48735_icgraph" alt=""/></div>
 <map name="da/d4d/class_discretized_placement_optimizer_ac887e7037dd60f0aa546b9021db48735_icgraph" id="da/d4d/class_discretized_placement_optimizer_ac887e7037dd60f0aa546b9021db48735_icgraph">
-<area shape="rect" id="node2" href="../../da/d4d/class_discretized_placement_optimizer.html#a3069944956249e888409dbc0f3300e08" title="Multithreaded Trajectory generation from Pt A to Pt B with differnt IK solutions. ..." alt="" coords="165,5,267,32"/></map>
+<area shape="rect" id="node2" href="../../da/d4d/class_discretized_placement_optimizer.html#a2cf46aa74e15588e4f1cb6eae3fb2072" title="Performs if the robot collides with any object in the internally cloned environment. " alt="" coords="166,5,298,32"/><area shape="rect" id="node3" href="../../da/d4d/class_discretized_placement_optimizer.html#a3441419dedc58e6d618fd8886a2dc3f9" title="The main function which needs to be called for base optimization. " alt="" coords="347,5,450,32"/></map>
 </div>
 </p>
 
@@ -333,7 +408,7 @@ Private Attributes</h2></td></tr>
 
 <p>Implements <a class="el" href="../../d0/df4/class_placement_optimizer_base.html#ab8907b6b9967c1ff74257b3e43989183">PlacementOptimizerBase</a>.</p>
 
-<p>Definition at line <a class="el" href="../../da/dab/placementoptimizer_8cpp_source.html#l00276">276</a> of file <a class="el" href="../../da/dab/placementoptimizer_8cpp_source.html">placementoptimizer.cpp</a>.</p>
+<p>Definition at line <a class="el" href="../../da/dab/placementoptimizer_8cpp_source.html#l00380">380</a> of file <a class="el" href="../../da/dab/placementoptimizer_8cpp_source.html">placementoptimizer.cpp</a>.</p>
 
 </div>
 </div>
@@ -363,11 +438,92 @@ Private Attributes</h2></td></tr>
 
 <p>Implements <a class="el" href="../../d0/df4/class_placement_optimizer_base.html#a81c671ac7afe9d983292fdee14eb7985">PlacementOptimizerBase</a>.</p>
 
-<p>Definition at line <a class="el" href="../../da/dab/placementoptimizer_8cpp_source.html#l00270">270</a> of file <a class="el" href="../../da/dab/placementoptimizer_8cpp_source.html">placementoptimizer.cpp</a>.</p>
+<p>Definition at line <a class="el" href="../../da/dab/placementoptimizer_8cpp_source.html#l00374">374</a> of file <a class="el" href="../../da/dab/placementoptimizer_8cpp_source.html">placementoptimizer.cpp</a>.</p>
 
 </div>
 </div>
-<a class="anchor" id="ab2db84c9b11689ec1eb3b364c4c5a6c9"></a>
+<a class="anchor" id="a702917e22ac138fc85b17b20abe558f3"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void GetTrajectoryTime </td>
+          <td>(</td>
+          <td class="paramtype">EnvironmentBasePtr&#160;</td>
+          <td class="paramname"><em>_penv</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">std::vector&lt; dReal &gt; &amp;&#160;</td>
+          <td class="paramname"><em>vsolutionA</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">std::vector&lt; dReal &gt; &amp;&#160;</td>
+          <td class="paramname"><em>vsolutionB</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">TrajectoryBasePtr&#160;</td>
+          <td class="paramname"><em>ptraj</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Performs the actual planning on the cloned environment. </p>
+<p>Taken from OpenRAVE example.</p>
+<p>No loop should be performed. Since multithreaded, each time this function is called, environment will be cloned internally to the member function </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">Environment</td><td>and vector of solutions for both Pose A and B </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>If called after optimizebase, returns the optimized time </dd></dl>
+
+<p>Definition at line <a class="el" href="../../da/dab/placementoptimizer_8cpp_source.html#l00113">113</a> of file <a class="el" href="../../da/dab/placementoptimizer_8cpp_source.html">placementoptimizer.cpp</a>.</p>
+
+<p><div id="dynsection-4" onclick="return toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
+  <img id="dynsection-4-trigger" src="../../closed.png" alt="+"/> Here is the call graph for this function:</div>
+<div id="dynsection-4-summary" class="dynsummary" style="display:block;">
+</div>
+<div id="dynsection-4-content" class="dyncontent" style="display:none;">
+<div class="center"><img src="../../da/d4d/class_discretized_placement_optimizer_a702917e22ac138fc85b17b20abe558f3_cgraph.png" border="0" usemap="#da/d4d/class_discretized_placement_optimizer_a702917e22ac138fc85b17b20abe558f3_cgraph" alt=""/></div>
+<map name="da/d4d/class_discretized_placement_optimizer_a702917e22ac138fc85b17b20abe558f3_cgraph" id="da/d4d/class_discretized_placement_optimizer_a702917e22ac138fc85b17b20abe558f3_cgraph">
+<area shape="rect" id="node2" href="../../da/d4d/class_discretized_placement_optimizer.html#afc2ba10213882717dd14eda1ca762dc1" title="writeData" alt="" coords="184,5,261,32"/></map>
+</div>
+</p>
+
+<p><div id="dynsection-5" onclick="return toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
+  <img id="dynsection-5-trigger" src="../../closed.png" alt="+"/> Here is the caller graph for this function:</div>
+<div id="dynsection-5-summary" class="dynsummary" style="display:block;">
+</div>
+<div id="dynsection-5-content" class="dyncontent" style="display:none;">
+<div class="center"><img src="../../da/d4d/class_discretized_placement_optimizer_a702917e22ac138fc85b17b20abe558f3_icgraph.png" border="0" usemap="#da/d4d/class_discretized_placement_optimizer_a702917e22ac138fc85b17b20abe558f3_icgraph" alt=""/></div>
+<map name="da/d4d/class_discretized_placement_optimizer_a702917e22ac138fc85b17b20abe558f3_icgraph" id="da/d4d/class_discretized_placement_optimizer_a702917e22ac138fc85b17b20abe558f3_icgraph">
+<area shape="rect" id="node2" href="../../da/d4d/class_discretized_placement_optimizer.html#a855f55aa4cea5cf4c70fe956a021722c" title="Multithreaded Trajectory generation from Pt A to Pt B with differnt IK solutions. ..." alt="" coords="207,5,308,32"/><area shape="rect" id="node4" href="../../da/d4d/class_discretized_placement_optimizer.html#ad3bb0b336b32e5000635a4be031303c1" title="Multithreaded Trajectory generation from Pt A to Pt B with differnt IK solutions. ..." alt="" coords="184,56,331,83"/><area shape="rect" id="node3" href="../../da/d4d/class_discretized_placement_optimizer.html#a3441419dedc58e6d618fd8886a2dc3f9" title="The main function which needs to be called for base optimization. " alt="" coords="379,5,482,32"/></map>
+</div>
+</p>
+
+</div>
+</div>
+<a class="anchor" id="ad3bb0b336b32e5000635a4be031303c1"></a>
 <div class="memitem">
 <div class="memproto">
 <table class="mlabels">
@@ -390,7 +546,13 @@ Private Attributes</h2></td></tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">std::vector&lt; std::vector&lt; dReal &gt; &gt;&#160;</td>
-          <td class="paramname"><em>vsolutionsB</em>&#160;</td>
+          <td class="paramname"><em>vsolutionsB</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">unsigned int&#160;</td>
+          <td class="paramname"><em>subThreads</em>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -416,27 +578,16 @@ Private Attributes</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>bool returns true if mulithreading is complete i.e all threads are joined </dd></dl>
 
-<p>Definition at line <a class="el" href="../../da/dab/placementoptimizer_8cpp_source.html#l00225">225</a> of file <a class="el" href="../../da/dab/placementoptimizer_8cpp_source.html">placementoptimizer.cpp</a>.</p>
+<p>Definition at line <a class="el" href="../../da/dab/placementoptimizer_8cpp_source.html#l00330">330</a> of file <a class="el" href="../../da/dab/placementoptimizer_8cpp_source.html">placementoptimizer.cpp</a>.</p>
 
-<p><div id="dynsection-2" onclick="return toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
-  <img id="dynsection-2-trigger" src="../../closed.png" alt="+"/> Here is the call graph for this function:</div>
-<div id="dynsection-2-summary" class="dynsummary" style="display:block;">
+<p><div id="dynsection-6" onclick="return toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
+  <img id="dynsection-6-trigger" src="../../closed.png" alt="+"/> Here is the call graph for this function:</div>
+<div id="dynsection-6-summary" class="dynsummary" style="display:block;">
 </div>
-<div id="dynsection-2-content" class="dyncontent" style="display:none;">
-<div class="center"><img src="../../da/d4d/class_discretized_placement_optimizer_ab2db84c9b11689ec1eb3b364c4c5a6c9_cgraph.png" border="0" usemap="#da/d4d/class_discretized_placement_optimizer_ab2db84c9b11689ec1eb3b364c4c5a6c9_cgraph" alt=""/></div>
-<map name="da/d4d/class_discretized_placement_optimizer_ab2db84c9b11689ec1eb3b364c4c5a6c9_cgraph" id="da/d4d/class_discretized_placement_optimizer_ab2db84c9b11689ec1eb3b364c4c5a6c9_cgraph">
-<area shape="rect" id="node2" href="../../d4/ddf/class_placement_optimizer_data.html#a79eb60f1ad058bb9f3f3ff3f5134cfa0" title="Performs the actual planning on the cloned environment. " alt="" coords="201,5,367,46"/><area shape="rect" id="node3" href="../../d4/ddf/class_placement_optimizer_data.html#a73479100fab2aad4c8390db891fac511" title="PlacementOptimizerData\l::writeData" alt="" coords="417,5,583,46"/></map>
-</div>
-</p>
-
-<p><div id="dynsection-3" onclick="return toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
-  <img id="dynsection-3-trigger" src="../../closed.png" alt="+"/> Here is the caller graph for this function:</div>
-<div id="dynsection-3-summary" class="dynsummary" style="display:block;">
-</div>
-<div id="dynsection-3-content" class="dyncontent" style="display:none;">
-<div class="center"><img src="../../da/d4d/class_discretized_placement_optimizer_ab2db84c9b11689ec1eb3b364c4c5a6c9_icgraph.png" border="0" usemap="#da/d4d/class_discretized_placement_optimizer_ab2db84c9b11689ec1eb3b364c4c5a6c9_icgraph" alt=""/></div>
-<map name="da/d4d/class_discretized_placement_optimizer_ab2db84c9b11689ec1eb3b364c4c5a6c9_icgraph" id="da/d4d/class_discretized_placement_optimizer_ab2db84c9b11689ec1eb3b364c4c5a6c9_icgraph">
-<area shape="rect" id="node2" href="../../da/d4d/class_discretized_placement_optimizer.html#a3069944956249e888409dbc0f3300e08" title="Multithreaded Trajectory generation from Pt A to Pt B with differnt IK solutions. ..." alt="" coords="200,5,301,32"/></map>
+<div id="dynsection-6-content" class="dyncontent" style="display:none;">
+<div class="center"><img src="../../da/d4d/class_discretized_placement_optimizer_ad3bb0b336b32e5000635a4be031303c1_cgraph.png" border="0" usemap="#da/d4d/class_discretized_placement_optimizer_ad3bb0b336b32e5000635a4be031303c1_cgraph" alt=""/></div>
+<map name="da/d4d/class_discretized_placement_optimizer_ad3bb0b336b32e5000635a4be031303c1_cgraph" id="da/d4d/class_discretized_placement_optimizer_ad3bb0b336b32e5000635a4be031303c1_cgraph">
+<area shape="rect" id="node2" href="../../da/d4d/class_discretized_placement_optimizer.html#a702917e22ac138fc85b17b20abe558f3" title="Performs the actual planning on the cloned environment. " alt="" coords="201,5,330,32"/><area shape="rect" id="node3" href="../../da/d4d/class_discretized_placement_optimizer.html#afc2ba10213882717dd14eda1ca762dc1" title="writeData" alt="" coords="379,5,456,32"/></map>
 </div>
 </p>
 
@@ -468,22 +619,22 @@ Private Attributes</h2></td></tr>
 
 <p>Implements <a class="el" href="../../d0/df4/class_placement_optimizer_base.html#ab2647b1af77666bc90df7e2fed1b14ae">PlacementOptimizerBase</a>.</p>
 
-<p>Definition at line <a class="el" href="../../da/dab/placementoptimizer_8cpp_source.html#l00126">126</a> of file <a class="el" href="../../da/dab/placementoptimizer_8cpp_source.html">placementoptimizer.cpp</a>.</p>
+<p>Definition at line <a class="el" href="../../da/dab/placementoptimizer_8cpp_source.html#l00218">218</a> of file <a class="el" href="../../da/dab/placementoptimizer_8cpp_source.html">placementoptimizer.cpp</a>.</p>
 
-<p><div id="dynsection-4" onclick="return toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
-  <img id="dynsection-4-trigger" src="../../closed.png" alt="+"/> Here is the call graph for this function:</div>
-<div id="dynsection-4-summary" class="dynsummary" style="display:block;">
+<p><div id="dynsection-7" onclick="return toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
+  <img id="dynsection-7-trigger" src="../../closed.png" alt="+"/> Here is the call graph for this function:</div>
+<div id="dynsection-7-summary" class="dynsummary" style="display:block;">
 </div>
-<div id="dynsection-4-content" class="dyncontent" style="display:none;">
+<div id="dynsection-7-content" class="dyncontent" style="display:none;">
 <div class="center"><img src="../../da/d4d/class_discretized_placement_optimizer_a3441419dedc58e6d618fd8886a2dc3f9_cgraph.png" border="0" usemap="#da/d4d/class_discretized_placement_optimizer_a3441419dedc58e6d618fd8886a2dc3f9_cgraph" alt=""/></div>
 <map name="da/d4d/class_discretized_placement_optimizer_a3441419dedc58e6d618fd8886a2dc3f9_cgraph" id="da/d4d/class_discretized_placement_optimizer_a3441419dedc58e6d618fd8886a2dc3f9_cgraph">
-<area shape="rect" id="node2" href="../../d4/ddf/class_placement_optimizer_data.html#abc831252e35d3eecbde5d3ac452a0c89" title="Performs if the robot collides with any object in the internally cloned environment. " alt="" coords="158,5,325,46"/></map>
+<area shape="rect" id="node2" href="../../da/d4d/class_discretized_placement_optimizer.html#aba78e196413b2018d6e445c6275a5721" title="UpdateGrid" alt="" coords="180,5,268,32"/><area shape="rect" id="node3" href="../../da/d4d/class_discretized_placement_optimizer.html#a2cf46aa74e15588e4f1cb6eae3fb2072" title="Performs if the robot collides with any object in the internally cloned environment. " alt="" coords="158,56,290,83"/><area shape="rect" id="node6" href="../../da/d4d/class_discretized_placement_optimizer.html#a855f55aa4cea5cf4c70fe956a021722c" title="Multithreaded Trajectory generation from Pt A to Pt B with differnt IK solutions. ..." alt="" coords="173,107,275,133"/><area shape="rect" id="node4" href="../../da/d4d/class_discretized_placement_optimizer.html#ac887e7037dd60f0aa546b9021db48735" title="Performs the actual planning on the cloned environment. " alt="" coords="349,5,459,32"/><area shape="rect" id="node5" href="../../da/d4d/class_discretized_placement_optimizer.html#ae75d036c4c16ce6f3d748e86cb459506" title="writePoseData" alt="" coords="351,56,457,83"/><area shape="rect" id="node7" href="../../da/d4d/class_discretized_placement_optimizer.html#a702917e22ac138fc85b17b20abe558f3" title="Performs the actual planning on the cloned environment. " alt="" coords="339,107,469,133"/><area shape="rect" id="node8" href="../../da/d4d/class_discretized_placement_optimizer.html#afc2ba10213882717dd14eda1ca762dc1" title="writeData" alt="" coords="517,107,595,133"/></map>
 </div>
 </p>
 
 </div>
 </div>
-<a class="anchor" id="a3069944956249e888409dbc0f3300e08"></a>
+<a class="anchor" id="a855f55aa4cea5cf4c70fe956a021722c"></a>
 <div class="memitem">
 <div class="memproto">
 <table class="mlabels">
@@ -493,8 +644,7 @@ Private Attributes</h2></td></tr>
         <tr>
           <td class="memname">bool PlanningLoop </td>
           <td>(</td>
-          <td class="paramtype">EnvironmentBasePtr&#160;</td>
-          <td class="paramname"><em>env</em></td><td>)</td>
+          <td class="paramname"></td><td>)</td>
           <td></td>
         </tr>
       </table>
@@ -514,16 +664,155 @@ Private Attributes</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>bool returns true if planning loop is performed </dd></dl>
 
-<p>Definition at line <a class="el" href="../../da/dab/placementoptimizer_8cpp_source.html#l00209">209</a> of file <a class="el" href="../../da/dab/placementoptimizer_8cpp_source.html">placementoptimizer.cpp</a>.</p>
+<p>Definition at line <a class="el" href="../../da/dab/placementoptimizer_8cpp_source.html#l00273">273</a> of file <a class="el" href="../../da/dab/placementoptimizer_8cpp_source.html">placementoptimizer.cpp</a>.</p>
 
-<p><div id="dynsection-5" onclick="return toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
-  <img id="dynsection-5-trigger" src="../../closed.png" alt="+"/> Here is the call graph for this function:</div>
-<div id="dynsection-5-summary" class="dynsummary" style="display:block;">
+<p><div id="dynsection-8" onclick="return toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
+  <img id="dynsection-8-trigger" src="../../closed.png" alt="+"/> Here is the call graph for this function:</div>
+<div id="dynsection-8-summary" class="dynsummary" style="display:block;">
 </div>
-<div id="dynsection-5-content" class="dyncontent" style="display:none;">
-<div class="center"><img src="../../da/d4d/class_discretized_placement_optimizer_a3069944956249e888409dbc0f3300e08_cgraph.png" border="0" usemap="#da/d4d/class_discretized_placement_optimizer_a3069944956249e888409dbc0f3300e08_cgraph" alt=""/></div>
-<map name="da/d4d/class_discretized_placement_optimizer_a3069944956249e888409dbc0f3300e08_cgraph" id="da/d4d/class_discretized_placement_optimizer_a3069944956249e888409dbc0f3300e08_cgraph">
-<area shape="rect" id="node2" href="../../da/d4d/class_discretized_placement_optimizer.html#ac887e7037dd60f0aa546b9021db48735" title="Performs the actual planning on the cloned environment. " alt="" coords="173,5,283,32"/><area shape="rect" id="node3" href="../../da/d4d/class_discretized_placement_optimizer.html#ab2db84c9b11689ec1eb3b364c4c5a6c9" title="Multithreaded Trajectory generation from Pt A to Pt B with differnt IK solutions. ..." alt="" coords="155,56,301,83"/><area shape="rect" id="node4" href="../../d4/ddf/class_placement_optimizer_data.html#a79eb60f1ad058bb9f3f3ff3f5134cfa0" title="Performs the actual planning on the cloned environment. " alt="" coords="350,49,517,90"/><area shape="rect" id="node5" href="../../d4/ddf/class_placement_optimizer_data.html#a73479100fab2aad4c8390db891fac511" title="PlacementOptimizerData\l::writeData" alt="" coords="566,49,733,90"/></map>
+<div id="dynsection-8-content" class="dyncontent" style="display:none;">
+<div class="center"><img src="../../da/d4d/class_discretized_placement_optimizer_a855f55aa4cea5cf4c70fe956a021722c_cgraph.png" border="0" usemap="#da/d4d/class_discretized_placement_optimizer_a855f55aa4cea5cf4c70fe956a021722c_cgraph" alt=""/></div>
+<map name="da/d4d/class_discretized_placement_optimizer_a855f55aa4cea5cf4c70fe956a021722c_cgraph" id="da/d4d/class_discretized_placement_optimizer_a855f55aa4cea5cf4c70fe956a021722c_cgraph">
+<area shape="rect" id="node2" href="../../da/d4d/class_discretized_placement_optimizer.html#a702917e22ac138fc85b17b20abe558f3" title="Performs the actual planning on the cloned environment. " alt="" coords="155,5,285,32"/><area shape="rect" id="node3" href="../../da/d4d/class_discretized_placement_optimizer.html#afc2ba10213882717dd14eda1ca762dc1" title="writeData" alt="" coords="333,5,411,32"/></map>
+</div>
+</p>
+
+<p><div id="dynsection-9" onclick="return toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
+  <img id="dynsection-9-trigger" src="../../closed.png" alt="+"/> Here is the caller graph for this function:</div>
+<div id="dynsection-9-summary" class="dynsummary" style="display:block;">
+</div>
+<div id="dynsection-9-content" class="dyncontent" style="display:none;">
+<div class="center"><img src="../../da/d4d/class_discretized_placement_optimizer_a855f55aa4cea5cf4c70fe956a021722c_icgraph.png" border="0" usemap="#da/d4d/class_discretized_placement_optimizer_a855f55aa4cea5cf4c70fe956a021722c_icgraph" alt=""/></div>
+<map name="da/d4d/class_discretized_placement_optimizer_a855f55aa4cea5cf4c70fe956a021722c_icgraph" id="da/d4d/class_discretized_placement_optimizer_a855f55aa4cea5cf4c70fe956a021722c_icgraph">
+<area shape="rect" id="node2" href="../../da/d4d/class_discretized_placement_optimizer.html#a3441419dedc58e6d618fd8886a2dc3f9" title="The main function which needs to be called for base optimization. " alt="" coords="155,5,258,32"/></map>
+</div>
+</p>
+
+</div>
+</div>
+<a class="anchor" id="aba78e196413b2018d6e445c6275a5721"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void UpdateGrid </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Definition at line <a class="el" href="../../da/dab/placementoptimizer_8cpp_source.html#l00184">184</a> of file <a class="el" href="../../da/dab/placementoptimizer_8cpp_source.html">placementoptimizer.cpp</a>.</p>
+
+<p><div id="dynsection-10" onclick="return toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
+  <img id="dynsection-10-trigger" src="../../closed.png" alt="+"/> Here is the caller graph for this function:</div>
+<div id="dynsection-10-summary" class="dynsummary" style="display:block;">
+</div>
+<div id="dynsection-10-content" class="dyncontent" style="display:none;">
+<div class="center"><img src="../../da/d4d/class_discretized_placement_optimizer_aba78e196413b2018d6e445c6275a5721_icgraph.png" border="0" usemap="#da/d4d/class_discretized_placement_optimizer_aba78e196413b2018d6e445c6275a5721_icgraph" alt=""/></div>
+<map name="da/d4d/class_discretized_placement_optimizer_aba78e196413b2018d6e445c6275a5721_icgraph" id="da/d4d/class_discretized_placement_optimizer_aba78e196413b2018d6e445c6275a5721_icgraph">
+<area shape="rect" id="node2" href="../../da/d4d/class_discretized_placement_optimizer.html#a3441419dedc58e6d618fd8886a2dc3f9" title="The main function which needs to be called for base optimization. " alt="" coords="142,5,245,32"/></map>
+</div>
+</p>
+
+</div>
+</div>
+<a class="anchor" id="afc2ba10213882717dd14eda1ca762dc1"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void writeData </td>
+          <td>(</td>
+          <td class="paramtype">TrajectoryBasePtr&#160;</td>
+          <td class="paramname"><em>ptraj</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">EnvironmentBasePtr&#160;</td>
+          <td class="paramname"><em>env</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Definition at line <a class="el" href="../../da/dab/placementoptimizer_8cpp_source.html#l00029">29</a> of file <a class="el" href="../../da/dab/placementoptimizer_8cpp_source.html">placementoptimizer.cpp</a>.</p>
+
+<p><div id="dynsection-11" onclick="return toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
+  <img id="dynsection-11-trigger" src="../../closed.png" alt="+"/> Here is the caller graph for this function:</div>
+<div id="dynsection-11-summary" class="dynsummary" style="display:block;">
+</div>
+<div id="dynsection-11-content" class="dyncontent" style="display:none;">
+<div class="center"><img src="../../da/d4d/class_discretized_placement_optimizer_afc2ba10213882717dd14eda1ca762dc1_icgraph.png" border="0" usemap="#da/d4d/class_discretized_placement_optimizer_afc2ba10213882717dd14eda1ca762dc1_icgraph" alt=""/></div>
+<map name="da/d4d/class_discretized_placement_optimizer_afc2ba10213882717dd14eda1ca762dc1_icgraph" id="da/d4d/class_discretized_placement_optimizer_afc2ba10213882717dd14eda1ca762dc1_icgraph">
+<area shape="rect" id="node2" href="../../da/d4d/class_discretized_placement_optimizer.html#a702917e22ac138fc85b17b20abe558f3" title="Performs the actual planning on the cloned environment. " alt="" coords="131,31,261,57"/><area shape="rect" id="node3" href="../../da/d4d/class_discretized_placement_optimizer.html#a855f55aa4cea5cf4c70fe956a021722c" title="Multithreaded Trajectory generation from Pt A to Pt B with differnt IK solutions. ..." alt="" coords="332,5,433,32"/><area shape="rect" id="node5" href="../../da/d4d/class_discretized_placement_optimizer.html#ad3bb0b336b32e5000635a4be031303c1" title="Multithreaded Trajectory generation from Pt A to Pt B with differnt IK solutions. ..." alt="" coords="309,56,456,83"/><area shape="rect" id="node4" href="../../da/d4d/class_discretized_placement_optimizer.html#a3441419dedc58e6d618fd8886a2dc3f9" title="The main function which needs to be called for base optimization. " alt="" coords="505,5,607,32"/></map>
+</div>
+</p>
+
+</div>
+</div>
+<a class="anchor" id="ae75d036c4c16ce6f3d748e86cb459506"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void writePoseData </td>
+          <td>(</td>
+          <td class="paramtype">Transform&#160;</td>
+          <td class="paramname"><em>T</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">std::vector&lt; std::vector&lt; dReal &gt; &gt;&#160;</td>
+          <td class="paramname"><em>solnsA</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">std::vector&lt; std::vector&lt; dReal &gt; &gt;&#160;</td>
+          <td class="paramname"><em>solnsB</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Definition at line <a class="el" href="../../da/dab/placementoptimizer_8cpp_source.html#l00011">11</a> of file <a class="el" href="../../da/dab/placementoptimizer_8cpp_source.html">placementoptimizer.cpp</a>.</p>
+
+<p><div id="dynsection-12" onclick="return toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
+  <img id="dynsection-12-trigger" src="../../closed.png" alt="+"/> Here is the caller graph for this function:</div>
+<div id="dynsection-12-summary" class="dynsummary" style="display:block;">
+</div>
+<div id="dynsection-12-content" class="dyncontent" style="display:none;">
+<div class="center"><img src="../../da/d4d/class_discretized_placement_optimizer_ae75d036c4c16ce6f3d748e86cb459506_icgraph.png" border="0" usemap="#da/d4d/class_discretized_placement_optimizer_ae75d036c4c16ce6f3d748e86cb459506_icgraph" alt=""/></div>
+<map name="da/d4d/class_discretized_placement_optimizer_ae75d036c4c16ce6f3d748e86cb459506_icgraph" id="da/d4d/class_discretized_placement_optimizer_ae75d036c4c16ce6f3d748e86cb459506_icgraph">
+<area shape="rect" id="node2" href="../../da/d4d/class_discretized_placement_optimizer.html#a2cf46aa74e15588e4f1cb6eae3fb2072" title="Performs if the robot collides with any object in the internally cloned environment. " alt="" coords="161,5,293,32"/><area shape="rect" id="node3" href="../../da/d4d/class_discretized_placement_optimizer.html#a3441419dedc58e6d618fd8886a2dc3f9" title="The main function which needs to be called for base optimization. " alt="" coords="342,5,445,32"/></map>
 </div>
 </p>
 
@@ -554,6 +843,30 @@ Private Attributes</h2></td></tr>
 </div>
 </div>
 <h2 class="groupheader">Field Documentation</h2>
+<a class="anchor" id="a55b3630a552de782f06944f1feefbe10"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">boost::mutex __mutex</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">mutable</span><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>mutex for shared resource </p>
+
+<p>Definition at line <a class="el" href="../../d4/dcf/placementoptimizer_8h_source.html#l00144">144</a> of file <a class="el" href="../../d4/dcf/placementoptimizer_8h_source.html">placementoptimizer.h</a>.</p>
+
+</div>
+</div>
 <a class="anchor" id="affb0ea3de200f9b3ee89cda342895769"></a>
 <div class="memitem">
 <div class="memproto">
@@ -574,31 +887,7 @@ Private Attributes</h2></td></tr>
 
 <p>User set optimizer data. </p>
 
-<p>Definition at line <a class="el" href="../../d4/dcf/placementoptimizer_8h_source.html#l00160">160</a> of file <a class="el" href="../../d4/dcf/placementoptimizer_8h_source.html">placementoptimizer.h</a>.</p>
-
-</div>
-</div>
-<a class="anchor" id="af0e5d3d9a8842161cef82a9584234463"></a>
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">string _iktype</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">private</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>Currently supports only 6D IK. </p>
-
-<p>Definition at line <a class="el" href="../../d4/dcf/placementoptimizer_8h_source.html#l00177">177</a> of file <a class="el" href="../../d4/dcf/placementoptimizer_8h_source.html">placementoptimizer.h</a>.</p>
+<p>Definition at line <a class="el" href="../../d4/dcf/placementoptimizer_8h_source.html#l00192">192</a> of file <a class="el" href="../../d4/dcf/placementoptimizer_8h_source.html">placementoptimizer.h</a>.</p>
 
 </div>
 </div>
@@ -620,7 +909,9 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="../../d4/dcf/placementoptimizer_8h_source.html#l00178">178</a> of file <a class="el" href="../../d4/dcf/placementoptimizer_8h_source.html">placementoptimizer.h</a>.</p>
+<p>Currently supports only 6D IK. </p>
+
+<p>Definition at line <a class="el" href="../../d4/dcf/placementoptimizer_8h_source.html#l00210">210</a> of file <a class="el" href="../../d4/dcf/placementoptimizer_8h_source.html">placementoptimizer.h</a>.</p>
 
 </div>
 </div>
@@ -644,7 +935,29 @@ Private Attributes</h2></td></tr>
 
 <p>Cloned Environment. </p>
 
-<p>Definition at line <a class="el" href="../../d4/dcf/placementoptimizer_8h_source.html#l00154">154</a> of file <a class="el" href="../../d4/dcf/placementoptimizer_8h_source.html">placementoptimizer.h</a>.</p>
+<p>Definition at line <a class="el" href="../../d4/dcf/placementoptimizer_8h_source.html#l00186">186</a> of file <a class="el" href="../../d4/dcf/placementoptimizer_8h_source.html">placementoptimizer.h</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="ab77667bd2d7d1ea824f10c841167a3ff"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">boost::mutex _posemutex</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">mutable</span><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Definition at line <a class="el" href="../../d4/dcf/placementoptimizer_8h_source.html#l00144">144</a> of file <a class="el" href="../../d4/dcf/placementoptimizer_8h_source.html">placementoptimizer.h</a>.</p>
 
 </div>
 </div>
@@ -668,7 +981,7 @@ Private Attributes</h2></td></tr>
 
 <p>Robot from cloned environment. </p>
 
-<p>Definition at line <a class="el" href="../../d4/dcf/placementoptimizer_8h_source.html#l00157">157</a> of file <a class="el" href="../../d4/dcf/placementoptimizer_8h_source.html">placementoptimizer.h</a>.</p>
+<p>Definition at line <a class="el" href="../../d4/dcf/placementoptimizer_8h_source.html#l00189">189</a> of file <a class="el" href="../../d4/dcf/placementoptimizer_8h_source.html">placementoptimizer.h</a>.</p>
 
 </div>
 </div>
@@ -692,11 +1005,11 @@ Private Attributes</h2></td></tr>
 
 <p>output robot pose. stored as result </p>
 
-<p>Definition at line <a class="el" href="../../d4/dcf/placementoptimizer_8h_source.html#l00163">163</a> of file <a class="el" href="../../d4/dcf/placementoptimizer_8h_source.html">placementoptimizer.h</a>.</p>
+<p>Definition at line <a class="el" href="../../d4/dcf/placementoptimizer_8h_source.html#l00195">195</a> of file <a class="el" href="../../d4/dcf/placementoptimizer_8h_source.html">placementoptimizer.h</a>.</p>
 
 </div>
 </div>
-<a class="anchor" id="a27fd650fdfe1430325c440fbdd3cc25a"></a>
+<a class="anchor" id="aeb05e57426afb713bcf37d6554b5331e"></a>
 <div class="memitem">
 <div class="memproto">
 <table class="mlabels">
@@ -704,7 +1017,7 @@ Private Attributes</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">double _timemilliseconds</td>
+          <td class="memname">double _timeseconds</td>
         </tr>
       </table>
   </td>
@@ -714,7 +1027,29 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="../../d4/dcf/placementoptimizer_8h_source.html#l00166">166</a> of file <a class="el" href="../../d4/dcf/placementoptimizer_8h_source.html">placementoptimizer.h</a>.</p>
+<p>Definition at line <a class="el" href="../../d4/dcf/placementoptimizer_8h_source.html#l00198">198</a> of file <a class="el" href="../../d4/dcf/placementoptimizer_8h_source.html">placementoptimizer.h</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="abfdc5bcbd54896349fc9929498a6d289"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::vector&lt; Transform &gt; gridMap</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Definition at line <a class="el" href="../../d4/dcf/placementoptimizer_8h_source.html#l00211">211</a> of file <a class="el" href="../../d4/dcf/placementoptimizer_8h_source.html">placementoptimizer.h</a>.</p>
 
 </div>
 </div>
@@ -736,7 +1071,7 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="../../d4/dcf/placementoptimizer_8h_source.html#l00175">175</a> of file <a class="el" href="../../d4/dcf/placementoptimizer_8h_source.html">placementoptimizer.h</a>.</p>
+<p>Definition at line <a class="el" href="../../d4/dcf/placementoptimizer_8h_source.html#l00207">207</a> of file <a class="el" href="../../d4/dcf/placementoptimizer_8h_source.html">placementoptimizer.h</a>.</p>
 
 </div>
 </div>
@@ -758,7 +1093,7 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="../../d4/dcf/placementoptimizer_8h_source.html#l00172">172</a> of file <a class="el" href="../../d4/dcf/placementoptimizer_8h_source.html">placementoptimizer.h</a>.</p>
+<p>Definition at line <a class="el" href="../../d4/dcf/placementoptimizer_8h_source.html#l00204">204</a> of file <a class="el" href="../../d4/dcf/placementoptimizer_8h_source.html">placementoptimizer.h</a>.</p>
 
 </div>
 </div>

@@ -1,5 +1,5 @@
 var searchData=
 [
-  ['writedata',['writeData',['../d4/ddf/class_placement_optimizer_data.html#a73479100fab2aad4c8390db891fac511',1,'PlacementOptimizerData']]],
-  ['writetoresource',['writeToResource',['../da/d4d/class_discretized_placement_optimizer.html#a91b561323aaf05bd8e73cf0ec741b7bf',1,'DiscretizedPlacementOptimizer']]]
+  ['quata',['quatA',['../d6/d2b/baseplacement__threaded__ln_8cpp.html#a4e10888edeb1d89014e9fea7efa4543d',1,'baseplacement_threaded_ln.cpp']]],
+  ['quatb',['quatB',['../d6/d2b/baseplacement__threaded__ln_8cpp.html#a629289db24ee5aa98df6e98a785af06d',1,'baseplacement_threaded_ln.cpp']]]
 ];

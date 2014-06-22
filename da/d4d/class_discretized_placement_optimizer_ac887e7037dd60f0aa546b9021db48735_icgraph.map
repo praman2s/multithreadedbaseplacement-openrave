@@ -1,3 +1,4 @@
 <map id="GetIKSolutions" name="GetIKSolutions">
-<area shape="rect" id="node2" href="$da/d4d/class_discretized_placement_optimizer.html#a3069944956249e888409dbc0f3300e08" title="Multithreaded Trajectory generation from Pt A to Pt B with differnt IK solutions. ..." alt="" coords="165,5,267,32"/>
+<area shape="rect" id="node2" href="$da/d4d/class_discretized_placement_optimizer.html#a2cf46aa74e15588e4f1cb6eae3fb2072" title="Performs if the robot collides with any object in the internally cloned environment. " alt="" coords="166,5,298,32"/>
+<area shape="rect" id="node3" href="$da/d4d/class_discretized_placement_optimizer.html#a3441419dedc58e6d618fd8886a2dc3f9" title="The main function which needs to be called for base optimization. " alt="" coords="347,5,450,32"/>
 </map>

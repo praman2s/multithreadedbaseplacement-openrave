@@ -1,3 +1,9 @@
 <map id="OptimizeBase" name="OptimizeBase">
-<area shape="rect" id="node2" href="$d4/ddf/class_placement_optimizer_data.html#abc831252e35d3eecbde5d3ac452a0c89" title="Performs if the robot collides with any object in the internally cloned environment. " alt="" coords="158,5,325,46"/>
+<area shape="rect" id="node2" href="$da/d4d/class_discretized_placement_optimizer.html#aba78e196413b2018d6e445c6275a5721" title="UpdateGrid" alt="" coords="180,5,268,32"/>
+<area shape="rect" id="node3" href="$da/d4d/class_discretized_placement_optimizer.html#a2cf46aa74e15588e4f1cb6eae3fb2072" title="Performs if the robot collides with any object in the internally cloned environment. " alt="" coords="158,56,290,83"/>
+<area shape="rect" id="node6" href="$da/d4d/class_discretized_placement_optimizer.html#a855f55aa4cea5cf4c70fe956a021722c" title="Multithreaded Trajectory generation from Pt A to Pt B with differnt IK solutions. ..." alt="" coords="173,107,275,133"/>
+<area shape="rect" id="node4" href="$da/d4d/class_discretized_placement_optimizer.html#ac887e7037dd60f0aa546b9021db48735" title="Performs the actual planning on the cloned environment. " alt="" coords="349,5,459,32"/>
+<area shape="rect" id="node5" href="$da/d4d/class_discretized_placement_optimizer.html#ae75d036c4c16ce6f3d748e86cb459506" title="writePoseData" alt="" coords="351,56,457,83"/>
+<area shape="rect" id="node7" href="$da/d4d/class_discretized_placement_optimizer.html#a702917e22ac138fc85b17b20abe558f3" title="Performs the actual planning on the cloned environment. " alt="" coords="339,107,469,133"/>
+<area shape="rect" id="node8" href="$da/d4d/class_discretized_placement_optimizer.html#afc2ba10213882717dd14eda1ca762dc1" title="writeData" alt="" coords="517,107,595,133"/>
 </map>
