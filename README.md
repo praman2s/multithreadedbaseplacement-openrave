@@ -4,7 +4,7 @@ multithreadedbaseplacement-openrave
 
 Directly want to play the optimized base pose and trajectory , execute :
 
-                                      python test.py
+              python test.py
 
 
 Compiling the code :
@@ -22,3 +22,9 @@ Results :
     
               progress and results are displayed
               trajectory result are stored in traj.xml in the same folder
+
+
+Code documentation (gh-pages) :
+
+               http://crazy-robot.github.io/multithreadedbaseplacement-openrave/
+               
