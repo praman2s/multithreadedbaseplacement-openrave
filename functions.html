@@ -92,7 +92,9 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
       <li><a href="#index_o"><span>o</span></a></li>
       <li><a href="#index_p"><span>p</span></a></li>
       <li><a href="#index_r"><span>r</span></a></li>
+      <li><a href="#index_s"><span>s</span></a></li>
       <li><a href="#index_t"><span>t</span></a></li>
+      <li><a href="#index_u"><span>u</span></a></li>
       <li><a href="#index_w"><span>w</span></a></li>
       <li><a href="#index_z"><span>z</span></a></li>
       <li class="current"><a href="#index_~"><span>~</span></a></li>
@@ -118,7 +120,7 @@ $(document).ready(function(){initNavTree('functions.html','');});
      onmouseover="return searchBox.OnSearchSelectShow()"
      onmouseout="return searchBox.OnSearchSelectHide()"
      onkeydown="return searchBox.OnSearchSelectKey(event)">
-<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&#160;</span>All</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&#160;</span>Data Structures</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(2)"><span class="SelectionMark">&#160;</span>Files</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(3)"><span class="SelectionMark">&#160;</span>Functions</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(4)"><span class="SelectionMark">&#160;</span>Variables</a></div>
+<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&#160;</span>All</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&#160;</span>Data Structures</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(2)"><span class="SelectionMark">&#160;</span>Namespaces</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(3)"><span class="SelectionMark">&#160;</span>Files</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(4)"><span class="SelectionMark">&#160;</span>Functions</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(5)"><span class="SelectionMark">&#160;</span>Variables</a></div>
 
 <!-- iframe showing the search results (closed by default) -->
 <div id="MSearchResultsWindow">
@@ -132,7 +134,7 @@ $(document).ready(function(){initNavTree('functions.html','');});
 
 <h3><a class="anchor" id="index__"></a>- _ -</h3><ul>
 <li>__mutex
-: <a class="el" href="d4/ddf/class_placement_optimizer_data.html#a55b3630a552de782f06944f1feefbe10">PlacementOptimizerData</a>
+: <a class="el" href="da/d4d/class_discretized_placement_optimizer.html#a55b3630a552de782f06944f1feefbe10">DiscretizedPlacementOptimizer</a>
 </li>
 <li>_allPoses
 : <a class="el" href="d4/ddf/class_placement_optimizer_data.html#a2776f41fc9abf671af826447ef169db8">PlacementOptimizerData</a>
@@ -140,8 +142,11 @@ $(document).ready(function(){initNavTree('functions.html','');});
 <li>_data
 : <a class="el" href="da/d4d/class_discretized_placement_optimizer.html#affb0ea3de200f9b3ee89cda342895769">DiscretizedPlacementOptimizer</a>
 </li>
+<li>_ikPoses
+: <a class="el" href="d4/ddf/class_placement_optimizer_data.html#ae72bfc4532182d34af51bfa17083ff8f">PlacementOptimizerData</a>
+</li>
 <li>_iktype
-: <a class="el" href="da/d4d/class_discretized_placement_optimizer.html#af0e5d3d9a8842161cef82a9584234463">DiscretizedPlacementOptimizer</a>
+: <a class="el" href="d4/ddf/class_placement_optimizer_data.html#af0e5d3d9a8842161cef82a9584234463">PlacementOptimizerData</a>
 </li>
 <li>_mutex
 : <a class="el" href="da/d4d/class_discretized_placement_optimizer.html#abf18812ae19b048af3f11234e0bf605c">DiscretizedPlacementOptimizer</a>
@@ -149,21 +154,24 @@ $(document).ready(function(){initNavTree('functions.html','');});
 <li>_penv
 : <a class="el" href="da/d4d/class_discretized_placement_optimizer.html#a021687bd8acf4d1ddec3d15d1ff9b97f">DiscretizedPlacementOptimizer</a>
 </li>
+<li>_posemutex
+: <a class="el" href="da/d4d/class_discretized_placement_optimizer.html#ab77667bd2d7d1ea824f10c841167a3ff">DiscretizedPlacementOptimizer</a>
+</li>
 <li>_probot
 : <a class="el" href="da/d4d/class_discretized_placement_optimizer.html#a96b8c6244de5c544065e0611b566cb84">DiscretizedPlacementOptimizer</a>
 </li>
 <li>_robotPose
 : <a class="el" href="da/d4d/class_discretized_placement_optimizer.html#adbf5e31f766e28e89879bef547b4e661">DiscretizedPlacementOptimizer</a>
 </li>
-<li>_timemilliseconds
-: <a class="el" href="da/d4d/class_discretized_placement_optimizer.html#a27fd650fdfe1430325c440fbdd3cc25a">DiscretizedPlacementOptimizer</a>
+<li>_timeseconds
+: <a class="el" href="da/d4d/class_discretized_placement_optimizer.html#aeb05e57426afb713bcf37d6554b5331e">DiscretizedPlacementOptimizer</a>
 </li>
 </ul>
 
 
 <h3><a class="anchor" id="index_c"></a>- c -</h3><ul>
 <li>CheckNoCollisions()
-: <a class="el" href="d4/ddf/class_placement_optimizer_data.html#abc831252e35d3eecbde5d3ac452a0c89">PlacementOptimizerData</a>
+: <a class="el" href="da/d4d/class_discretized_placement_optimizer.html#a2cf46aa74e15588e4f1cb6eae3fb2072">DiscretizedPlacementOptimizer</a>
 </li>
 </ul>
 
@@ -197,7 +205,10 @@ $(document).ready(function(){initNavTree('functions.html','');});
 , <a class="el" href="d0/df4/class_placement_optimizer_base.html#a81c671ac7afe9d983292fdee14eb7985">PlacementOptimizerBase</a>
 </li>
 <li>GetTrajectoryTime()
-: <a class="el" href="d4/ddf/class_placement_optimizer_data.html#a79eb60f1ad058bb9f3f3ff3f5134cfa0">PlacementOptimizerData</a>
+: <a class="el" href="da/d4d/class_discretized_placement_optimizer.html#a702917e22ac138fc85b17b20abe558f3">DiscretizedPlacementOptimizer</a>
+</li>
+<li>gridMap
+: <a class="el" href="da/d4d/class_discretized_placement_optimizer.html#abfdc5bcbd54896349fc9929498a6d289">DiscretizedPlacementOptimizer</a>
 </li>
 </ul>
 
@@ -221,7 +232,7 @@ $(document).ready(function(){initNavTree('functions.html','');});
 : <a class="el" href="d4/ddf/class_placement_optimizer_data.html#ad8b66a6d214661ff9fa663bc3921f5a2">PlacementOptimizerData</a>
 </li>
 <li>MulithreadedPlanning()
-: <a class="el" href="da/d4d/class_discretized_placement_optimizer.html#ab2db84c9b11689ec1eb3b364c4c5a6c9">DiscretizedPlacementOptimizer</a>
+: <a class="el" href="da/d4d/class_discretized_placement_optimizer.html#ad3bb0b336b32e5000635a4be031303c1">DiscretizedPlacementOptimizer</a>
 </li>
 </ul>
 
@@ -246,7 +257,7 @@ $(document).ready(function(){initNavTree('functions.html','');});
 : <a class="el" href="d4/ddf/class_placement_optimizer_data.html#aed34b303155d4ff642f32bbed534396d">PlacementOptimizerData</a>
 </li>
 <li>PlanningLoop()
-: <a class="el" href="da/d4d/class_discretized_placement_optimizer.html#a3069944956249e888409dbc0f3300e08">DiscretizedPlacementOptimizer</a>
+: <a class="el" href="da/d4d/class_discretized_placement_optimizer.html#a855f55aa4cea5cf4c70fe956a021722c">DiscretizedPlacementOptimizer</a>
 </li>
 <li>points
 : <a class="el" href="d4/ddf/class_placement_optimizer_data.html#a8bf458ca429fcd9399dab2d3ca9afded">PlacementOptimizerData</a>
@@ -261,7 +272,20 @@ $(document).ready(function(){initNavTree('functions.html','');});
 </ul>
 
 
+<h3><a class="anchor" id="index_s"></a>- s -</h3><ul>
+<li>solnsA
+: <a class="el" href="d8/d53/struct_pose_map.html#a40c3e1350237083b5d0261e0554f7b94">PoseMap</a>
+</li>
+<li>solnsB
+: <a class="el" href="d8/d53/struct_pose_map.html#abac5b713f7f4b85c96025c09b69912a0">PoseMap</a>
+</li>
+</ul>
+
+
 <h3><a class="anchor" id="index_t"></a>- t -</h3><ul>
+<li>t
+: <a class="el" href="d8/d53/struct_pose_map.html#a4bfaa498eb2b9439c19b12dee6d9af45">PoseMap</a>
+</li>
 <li>Ta
 : <a class="el" href="d4/ddf/class_placement_optimizer_data.html#ad8dde190b965f38107d8568aeed4696d">PlacementOptimizerData</a>
 </li>
@@ -274,9 +298,19 @@ $(document).ready(function(){initNavTree('functions.html','');});
 </ul>
 
 
+<h3><a class="anchor" id="index_u"></a>- u -</h3><ul>
+<li>UpdateGrid()
+: <a class="el" href="da/d4d/class_discretized_placement_optimizer.html#aba78e196413b2018d6e445c6275a5721">DiscretizedPlacementOptimizer</a>
+</li>
+</ul>
+
+
 <h3><a class="anchor" id="index_w"></a>- w -</h3><ul>
 <li>writeData()
-: <a class="el" href="d4/ddf/class_placement_optimizer_data.html#a73479100fab2aad4c8390db891fac511">PlacementOptimizerData</a>
+: <a class="el" href="da/d4d/class_discretized_placement_optimizer.html#afc2ba10213882717dd14eda1ca762dc1">DiscretizedPlacementOptimizer</a>
+</li>
+<li>writePoseData()
+: <a class="el" href="da/d4d/class_discretized_placement_optimizer.html#ae75d036c4c16ce6f3d748e86cb459506">DiscretizedPlacementOptimizer</a>
 </li>
 <li>writeToResource()
 : <a class="el" href="da/d4d/class_discretized_placement_optimizer.html#a91b561323aaf05bd8e73cf0ec741b7bf">DiscretizedPlacementOptimizer</a>

@@ -1,7 +1,10 @@
 var NAVTREE =
 [
   [ "Placement Optimizer", "index.html", [
-    [ "Optimizer", "index.html#Placement", null ],
+    [ "Namespace Members", "namespacemembers.html", [
+      [ "All", "namespacemembers.html", null ],
+      [ "Functions", "namespacemembers_func.html", null ]
+    ] ],
     [ "Data Structures", null, [
       [ "Data Structures", "annotated.html", "annotated" ],
       [ "Data Structure Index", "classes.html", null ],
