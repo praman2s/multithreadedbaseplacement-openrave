@@ -27,12 +27,12 @@ int processCommandLineParameters(int argc, char *argv[], EnvironmentBasePtr & en
     po::notify(vm);  
 
     if (vm.count("help")) {
-       cout << "executable " << " " << " --scene=scene file " << " --robot=robotname "
-	    << "--manip = manipulatorname \n";
+       cout << "./executable " << " " << " --scene=scenefile " << " --robot=robotname "
+	    << "--manip = manipulatorname " << "--thread=number" \n";
        return 1;
     }  
     if(argc !=5){
-	cout << "Command line options are \n" << "executable " << " " << " --scene=scene file " << " --robot=robotname "
+	cout << "Command line options are \n" << "./executable " << " " << " --scene=scenefile " << " --robot=robotname "
 	    << "--manip=manipulatorname "<< "--threads=number \n";
        return 1;
     }
