@@ -28,12 +28,12 @@ int processCommandLineParameters(int argc, char *argv[], EnvironmentBasePtr & en
 
     if (vm.count("help")) {
        cout << "./executable " << " " << " --scene=scenefile " << " --robot=robotname "
-	    << "--manip = manipulatorname " << "--thread=number" \n";
+	    << "--manip = manipulatorname " << "--thread=number\n";
        return 1;
     }  
     if(argc !=5){
 	cout << "Command line options are \n" << "./executable " << " " << " --scene=scenefile " << " --robot=robotname "
-	    << "--manip=manipulatorname "<< "--threads=number \n";
+	    << "--manip=manipulatorname "<< "--threads=number\n";
        return 1;
     }
     if (vm.count("scene")) {
