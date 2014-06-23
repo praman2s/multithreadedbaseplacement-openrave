@@ -1,6 +1,8 @@
 multithreadedbaseplacement-openrave
 ==================
 
+Bug fixes after delivery
+
 Tested in :
 
 	      Ubuntu 14.04 ( gcc 4.7.3 )
