@@ -9,7 +9,8 @@
 
 #include "common.h"
 #include <boost/noncopyable.hpp>
-
+#include <boost/thread/condition_variable.hpp>
+#include <boost/thread/mutex.hpp>
 
 struct PoseMap {
 
@@ -84,12 +85,6 @@ public:
     std::vector < PoseMap > _ikPoses;
     string _iktype;
    
-
-
-   
-
-    
-	
 };
 
 
@@ -138,8 +133,7 @@ public:
      void  UpdateGrid();
 
 private:
-    /// managed threads	
-    vector<boost::shared_ptr<boost::thread> > _threads;   
+      
 
     /// mutex for shared resource
     mutable boost::mutex __mutex, _posemutex;
@@ -157,7 +151,7 @@ private:
     /// \param std::vector< std::vector< dReal > > Pt A solutions
     /// \param std::vector< std::vector< dReal > > Pt B solutions
     /// \return bool returns true if mulithreading is complete i.e all threads are joined
-    bool MulithreadedPlanning(EnvironmentBasePtr env, std::vector< std::vector< dReal > > vsolutionsA, std::vector< std::vector< dReal > > vsolutionsB, unsigned int subThreads);
+    bool MultithreadedPlanning();
 
     /// \brief Multithreaded Trajectory generation from Pt A to Pt B with differnt IK solutions.
     /// \param EnvironmentBasePtr environment under which planning loop is performed
@@ -210,6 +204,15 @@ private:
    
     boost::mutex _mutex;
     std::vector< Transform > gridMap;
+
+
+protected :
+
+    /// managing threads	
+    vector<boost::shared_ptr<boost::thread> > _threads; 
+    unsigned int _cnt;
+    bool _dataReady;
+    boost::condition_variable _poseCondition;
 
 
 };

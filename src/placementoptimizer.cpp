@@ -6,24 +6,24 @@
 
 
 #include <placementoptimizer/placementoptimizer.h>
-#include <boost/thread/mutex.hpp>
+
 
 void DiscretizedPlacementOptimizer :: writePoseData(Transform T, std::vector< std::vector< dReal > > solnsA, std::vector< std::vector< dReal > > solnsB) {
-        struct PoseMap Map;
+	_dataReady = false;        
+	struct PoseMap Map;
 	Map.t = T;
 	Map.solnsA = solnsA;
 	Map.solnsB = solnsB;
-	//boost::lock<boost::mutex> scoped_lock(_posemutex);
-	if ( !!_posemutex.try_lock()){
-		
+	{
+		boost::unique_lock<boost::mutex> lock(_posemutex);
 		_data->_ikPoses.push_back(Map);
-		_posemutex.unlock();
+		RAVELOG_INFO("Notify a waiting thread \n");
+		_dataReady = true;
 	}
-	else{
-		//tested. condition never occurs
-	     std::cout << boost::this_thread::get_id() << " did not get mutex" << std::endl;
-	}
-
+	
+	_poseCondition.notify_one();
+	
+	
 }
 
 void DiscretizedPlacementOptimizer :: writeData(TrajectoryBasePtr ptraj, EnvironmentBasePtr env){
@@ -40,6 +40,7 @@ void DiscretizedPlacementOptimizer :: writeData(TrajectoryBasePtr ptraj, Environ
             traj << ss.str();
             traj.close();
 	    _robotPose = env->GetRobot(_data->robotname)->GetTransform();
+	    RAVELOG_INFO( "Replacing Trajectory Files\n" );
         }
         else {
             RAVELOG_INFO( "Ignoring Trajectory Files\n" );
@@ -171,14 +172,17 @@ DiscretizedPlacementOptimizer:: DiscretizedPlacementOptimizer
     _data(data){
     _timeseconds = 100.0; // higher enough to let the first trajectory store into file
     k_threads = 1;
-   //_threads(_data->numThreads);
+    _threads.resize(_data->numThreads);
     _probot = _penv->GetRobot(_data->robotname);
+    _dataReady = false; 
+    _cnt = 0;
     
 
 }
 
 DiscretizedPlacementOptimizer :: ~DiscretizedPlacementOptimizer(){
 
+   
 
 }
 
@@ -215,67 +219,31 @@ void DiscretizedPlacementOptimizer :: UpdateGrid(){
 
 }
 
-
+/// minimum two threads even if user initiates zero threads
 bool DiscretizedPlacementOptimizer :: OptimizeBase(){
-
-    unsigned int cnt = 0, thread_cnt = _data->numThreads,  _thread_cnt = 0; //local count for threads
-    std::vector< EnvironmentBasePtr > pclondedenv ( thread_cnt );
-    RobotBasePtr probot_clone;
-    UpdateGrid();
-    RobotBasePtr robot;
    
-    vector<boost::shared_ptr<boost::thread> > _threadscollision(thread_cnt);
-
-    for (unsigned int i = 0; i < gridMap.size() ; ){
-	
-	if(cnt < thread_cnt){
-		pclondedenv[cnt] = _penv->CloneSelf(Clone_Bodies); 
-		probot_clone = pclondedenv[cnt]->GetRobot(_data->robotname);
-		probot_clone->SetTransform(gridMap[i]);
-		i = i+1;
-		//_threadscollision[cnt].reset(new boost::thread(boost::bind(&DiscretizedPlacementOptimizer:: CheckNoCollisions,_data, pclondedenv[cnt] , _data->ignorebody))); 
-		 _threadscollision[cnt].reset(new boost::thread(boost::bind(&DiscretizedPlacementOptimizer :: CheckNoCollisions, this, pclondedenv[cnt])));
-		RAVELOG_INFO("%d / %d \n",i,gridMap.size());
-		cnt++;
-		_thread_cnt++;
-		
-	}
-	else{
-		//polling rather than to wait
-		for (unsigned int m=0; m < cnt; m++) {
-			//if(_threadscollision[m]->joinable()){
-		            _threadscollision[m]->join();
-			    pclondedenv[m]->Destroy();
-			    //break;
-			//}
-			     
-        	}
-		
-		cnt = 0;
-		
-	  
-
-	}
-	
-      }
-      for (unsigned int m=0; m < cnt; m++) {
-		_threadscollision[m]->join();
-        }
-    
-    RAVELOG_INFO("Found %d base poses with no collision and corresponding IK solutions\n", _data->_ikPoses.size());
-    PlanningLoop ();
+    std::vector < boost::shared_ptr < boost::thread > > mainthread(2);
+    mainthread[0].reset(new boost::thread(boost::bind(&DiscretizedPlacementOptimizer :: MultithreadedPlanning,this)));
+    mainthread[1].reset(new boost::thread(boost::bind(&DiscretizedPlacementOptimizer :: PlanningLoop,this)));
+    mainthread[0]->join();
+    mainthread[1]->join();
     return true; // always returns true if all the threads are complete
 
 }
 
 
 
-
+/// Instantiate a thread waiting for a valid base pose
 bool DiscretizedPlacementOptimizer :: PlanningLoop (){
-
-    unsigned int cnt = 0, thread_cnt = _data->numThreads,  _thread_cnt = 0; //local count for threads
-    vector<boost::shared_ptr<boost::thread> > vthreads( thread_cnt ); //initiate threads for mulithreaded planning
-    std::vector< EnvironmentBasePtr > pclondedenv ( thread_cnt ); 
+    
+    boost::unique_lock<boost::mutex> lock(_posemutex);
+	
+    while(!_dataReady)
+	_poseCondition.wait(lock);	
+   
+    unsigned int  localcnt = 0, threadCnt =  _data->numThreads,  _threadCnt = 0; //local count for threads
+    //vector<boost::shared_ptr<boost::thread> >  _threads( threadCnt ); //initiate threads for mulithreaded planning
+    std::vector< EnvironmentBasePtr > pclondedenv ( threadCnt ); 
     RobotBasePtr probot_clone;
     Transform robot_t;
     std::vector< std::vector< dReal > > vsolutionA, vsolutionB ;
@@ -288,28 +256,28 @@ bool DiscretizedPlacementOptimizer :: PlanningLoop (){
 	    std::cout << vsolutionA.size() << "," << vsolutionB.size() << std::endl;
 	for (unsigned int j = 0; j < vsolutionA.size(); j++) {
 		for (unsigned int k = 0; k < vsolutionB.size(); ) {
-			if(cnt < thread_cnt){
+			if(localcnt < threadCnt){
 				std::cout << j << "," << k << std::endl;
-				pclondedenv[cnt] = _penv->CloneSelf(Clone_Bodies); 
-				probot_clone = pclondedenv[cnt]->GetRobot(_data->robotname);
+				pclondedenv[localcnt] = _penv->CloneSelf(Clone_Bodies); 
+				probot_clone = pclondedenv[localcnt]->GetRobot(_data->robotname);
 				probot_clone->SetTransform(robot_t);
-				vthreads[cnt].reset(new boost::thread(boost::bind(&DiscretizedPlacementOptimizer :: GetTrajectoryTime, this, pclondedenv[cnt], vsolutionA[j], vsolutionB[k], ptraj)));
+				 _threads[localcnt].reset(new boost::thread(boost::bind(&DiscretizedPlacementOptimizer :: GetTrajectoryTime, this, pclondedenv[localcnt], vsolutionA[j], vsolutionB[k], ptraj)));
 		                k++;
-				cnt++;
-				_thread_cnt++;
+				localcnt++;
+				_threadCnt++;
 		
 			}
 			else{
 				//polling rather than to wait
-				for (unsigned int m=0; m < cnt; m++) {
-					//if( vthreads[m]->joinable()){
-					    vthreads[m]->join();
+				for (unsigned int m=0; m < localcnt; m++) {
+					//if(  _threads[m]->joinable()){
+					     _threads[m]->join();
 					    pclondedenv[m]->Destroy();
 					    //break;
 					 //}
 				}
 		
-				cnt = 0;
+				localcnt = 0;
 		
 			  
 
@@ -317,54 +285,68 @@ bool DiscretizedPlacementOptimizer :: PlanningLoop (){
 	
 		}
 	 }
-      	for (unsigned int m=0; m < cnt; m++) {
-		vthreads[m]->join();
-	}
+    // join all the active threads
+    for (unsigned int m=0; m < localcnt; m++) {
+		 _threads[m]->join();
+    }
 
 
   }
+  
     return true;     // returns true after completion of all threads
 }
 
 
 
-bool DiscretizedPlacementOptimizer :: MulithreadedPlanning(EnvironmentBasePtr env, std::vector< std::vector< dReal > > vsolutionsA, std::vector< std::vector< dReal > > vsolutionsB, unsigned int subThreads){
+bool DiscretizedPlacementOptimizer :: MultithreadedPlanning(){
 
-    std::vector< EnvironmentBasePtr > pclondedenv ( subThreads );
+    unsigned int  threadCnt = _data->numThreads - 1,  _threadCnt = 0; //local count for threads
+    std::vector< EnvironmentBasePtr > pclondedenv ( threadCnt );
+    RobotBasePtr probot_clone;
+    UpdateGrid();
+    RobotBasePtr robot;
     
-    unsigned int cnt = 0, thread_cnt = subThreads,  _thread_cnt = 0; //local count for threads
-    TrajectoryBasePtr ptraj;
-    vector<boost::shared_ptr<boost::thread> > vthreads(thread_cnt); //initiate threads for mulithreaded planning
-    for (unsigned int i = 0; i < vsolutionsA.size(); i++) {
-        for (unsigned int j = 0; j < vsolutionsB.size(); ) {
+    //PlanningLoop ();
+    //vector<boost::shared_ptr<boost::thread> >  _threads(threadCnt);
 
-            if( cnt < thread_cnt ) {
-		pclondedenv[cnt] = _penv->CloneSelf(Clone_Bodies); 
-                vthreads[cnt].reset(new boost::thread(boost::bind(&DiscretizedPlacementOptimizer :: GetTrajectoryTime, this, pclondedenv[cnt], vsolutionsA[i], vsolutionsB[j], ptraj)));
-		j = j+1;
-                cnt++;
-                _thread_cnt++;
-                
-            }
-            else {
-                for (unsigned int k=0; k < cnt; k++) {
-                     vthreads[k]->join();
-		     pclondedenv[k]->Destroy();
+    for (unsigned int i = 0; i < gridMap.size() ; ){
+	
+	if(_cnt < threadCnt){
+		pclondedenv[_cnt] = _penv->CloneSelf(Clone_Bodies); 
+		probot_clone = pclondedenv[_cnt]->GetRobot(_data->robotname);
+		probot_clone->SetTransform(gridMap[i]);
+		i = i+1;
+		_threads[_cnt].reset(new boost::thread(boost::bind(&DiscretizedPlacementOptimizer :: CheckNoCollisions, this, pclondedenv[_cnt])));
+		// _threads[_cnt]->detach();
+		RAVELOG_INFO("%d / %d \n",i,gridMap.size());
+		_cnt++;
+		_threadCnt++;
+		
+	}
+	else{
+		//polling rather than to wait
+		for (unsigned int m=0; m < _cnt; m++) {
+			//if( _threads[m]->joinable()){
+		             _threads[m]->join();
+			    pclondedenv[m]->Destroy();
+			    //break;
+			//}
+			     
+        	}
+		
+		_cnt = 0;
+		
+	  
 
-                }
-                cnt = 0;
-            }
+	}
+	
+      }
+      for (unsigned int m=0; m < _cnt; m++) {
+		 _threads[m]->join();
         }
-
-
-    }
-
-    for (unsigned int k=0; k < cnt; k++) {
-        vthreads[k]->join();
-        _thread_cnt--;
-
-    }
-
+    _cnt = 0;
+    
+    RAVELOG_VERBOSE("Found %d base poses with no collision and corresponding IK solutions\n", _data->_ikPoses.size());
     return true;  // returns true only after synchronization
 
 
