@@ -219,7 +219,7 @@ void DiscretizedPlacementOptimizer :: UpdateGrid(){
 
 }
 
-/// minimum two threads even if user initiates zero threads
+/// minimum two threads will be created even if user initiates one threads
 bool DiscretizedPlacementOptimizer :: OptimizeBase(){
    
     std::vector < boost::shared_ptr < boost::thread > > mainthread(2);
@@ -253,11 +253,11 @@ bool DiscretizedPlacementOptimizer :: PlanningLoop (){
 	    robot_t  = _data->_ikPoses[i].t;
 	    vsolutionA = _data->_ikPoses[i].solnsA;
             vsolutionB = _data->_ikPoses[i].solnsB;
-	    std::cout << vsolutionA.size() << "," << vsolutionB.size() << std::endl;
+	    //std::cout << vsolutionA.size() << "," << vsolutionB.size() << std::endl;
 	for (unsigned int j = 0; j < vsolutionA.size(); j++) {
 		for (unsigned int k = 0; k < vsolutionB.size(); ) {
 			if(localcnt < threadCnt){
-				std::cout << j << "," << k << std::endl;
+				//std::cout << j << "," << k << std::endl;
 				pclondedenv[localcnt] = _penv->CloneSelf(Clone_Bodies); 
 				probot_clone = pclondedenv[localcnt]->GetRobot(_data->robotname);
 				probot_clone->SetTransform(robot_t);
@@ -300,7 +300,7 @@ bool DiscretizedPlacementOptimizer :: PlanningLoop (){
 
 bool DiscretizedPlacementOptimizer :: MultithreadedPlanning(){
 
-    unsigned int  threadCnt = _data->numThreads - 1,  _threadCnt = 0; //local count for threads
+    unsigned int  threadCnt = _data->numThreads,  _threadCnt = 0; //local count for threads
     std::vector< EnvironmentBasePtr > pclondedenv ( threadCnt );
     RobotBasePtr probot_clone;
     UpdateGrid();

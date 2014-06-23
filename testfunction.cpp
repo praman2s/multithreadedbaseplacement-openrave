@@ -43,6 +43,9 @@ int processCommandLineParameters(int argc, char *argv[], EnvironmentBasePtr & en
     }
     if (vm.count("threads")) {
 	data->numThreads =  vm["threads"].as<unsigned int>();
+	if (data->numThreads == 0){
+		RAVELOG_WARN("No of threads set as zero. Will just wait for infinite. Restart with atleast 1 thread \n");
+	}
     }
     if (vm.count("robot")) {
 	robotname =  vm["robot"].as<string>();
@@ -82,6 +85,7 @@ int main(int argc, char *argv[])
     // loading optimizer data for placement optimizer
     boost::shared_ptr<PlacementOptimizerData> defaultOptimizerData(new PlacementOptimizerData());
     if (!processCommandLineParameters( argc, argv, penv, defaultOptimizerData)){  //process command line parameters
+           
 	    double _time;    // to store the time
 	    //initiate the placement optimizer
 	    boost::shared_ptr<PlacementOptimizerBase> optimizer( new DiscretizedPlacementOptimizer(penv,defaultOptimizerData ));
@@ -92,6 +96,8 @@ int main(int argc, char *argv[])
 		RAVELOG_INFO("The trajectory duration is %f . The trajectory file is saved as traj.xml\n",_time);
 
 	    } // should be called only after optimizebase
+	    
+
     }
     RaveDestroy();
     return 0;
