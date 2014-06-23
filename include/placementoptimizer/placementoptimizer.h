@@ -11,6 +11,7 @@
 #include <boost/noncopyable.hpp>
 #include <boost/thread/condition_variable.hpp>
 #include <boost/thread/mutex.hpp>
+#include <boost/enable_shared_from_this.hpp>
 
 /////////////////////////////////////////////////////////////////////////////////
 /// structure to store map values. 
@@ -97,7 +98,7 @@ public:
 /// Optimizes the position of the base to move manipulator from A to B w.r.t time
 /////////////////////////////////////////////////////////////////////////////////
 
-class PlacementOptimizerBase {
+class PlacementOptimizerBase : public boost::enable_shared_from_this<lacementOptimizerBase> {
 
 public:
     virtual ~PlacementOptimizerBase(){
