@@ -182,7 +182,10 @@ DiscretizedPlacementOptimizer:: DiscretizedPlacementOptimizer
 
 DiscretizedPlacementOptimizer :: ~DiscretizedPlacementOptimizer(){
 
-   
+   //check finally if any threads are active and join. Should not raise this condition.
+   for (unsigned int m=0; m < _cnt; m++) {
+		 _threads[m]->join();
+   }
 
 }
 
