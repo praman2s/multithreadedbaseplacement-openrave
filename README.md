@@ -6,7 +6,7 @@ Tested in :
 	      Ubuntu 14.04
 	      Boost 1.54.0
 	      OpenRAVE 0.9 (master)
-              gcc 4.7.3
+           gcc 4.7.3
               	      
 
 Directly want to play the optimized base pose and trajectory , execute :
