@@ -44,7 +44,7 @@ int processCommandLineParameters(int argc, char *argv[], EnvironmentBasePtr & en
     if (vm.count("threads")) {
 	data->numThreads =  vm["threads"].as<unsigned int>();
 	if (data->numThreads == 0){
-		RAVELOG_WARN("No of threads set as zero. Will just wait for infinite. Restart with atleast 1 thread \n");
+		RAVELOG_ERROR("No of threads set as zero. Will just wait for infinite. Restart with atleast 1 thread \n");
 	}
     }
     if (vm.count("robot")) {
