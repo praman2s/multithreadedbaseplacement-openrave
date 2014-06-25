@@ -147,7 +147,7 @@ void DiscretizedPlacementOptimizer:: GetTrajectoryTime(EnvironmentBasePtr env, s
 		//RAVELOG_INFO("starting to plan\n");
 		
 		if( !planner->InitPlan(probot,params) ) {
-			
+			return;
 		}
 		// create a new output trajectory
 		

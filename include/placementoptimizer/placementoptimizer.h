@@ -98,7 +98,7 @@ public:
 /// Optimizes the position of the base to move manipulator from A to B w.r.t time
 /////////////////////////////////////////////////////////////////////////////////
 
-class PlacementOptimizerBase : public boost::enable_shared_from_this<lacementOptimizerBase> {
+class PlacementOptimizerBase : public boost::enable_shared_from_this<PlacementOptimizerBase> {
 
 public:
     virtual ~PlacementOptimizerBase(){

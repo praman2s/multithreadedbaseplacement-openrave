@@ -16,6 +16,7 @@
 #include <math.h>
 #include <iostream>
 #include <boost/thread/recursive_mutex.hpp>
+//#include <boost/phoenix/bind/bind_member_function.hpp>
 
 using namespace OpenRAVE;
 using namespace std;
