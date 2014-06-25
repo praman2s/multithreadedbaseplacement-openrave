@@ -16,12 +16,13 @@ void DiscretizedPlacementOptimizer :: writePoseData(Transform T, std::vector< st
 	Map.solnsB = solnsB;
 	{
 		boost::unique_lock<boost::mutex> lock(_posemutex);
+		std::cout << Map.t.trans << std::endl;
 		_data->_ikPoses.push_back(Map);
 		RAVELOG_INFO("Notify a waiting thread \n");
 		_dataReady = true;
 	}
 	
-	_poseCondition.notify_one();
+	//_poseCondition.notify_one();
 	
 	
 }
@@ -233,8 +234,9 @@ bool DiscretizedPlacementOptimizer :: OptimizeBase(){
    
     std::vector < boost::shared_ptr < boost::thread > > mainthread(2);
     mainthread[0].reset(new boost::thread(boost::bind(&DiscretizedPlacementOptimizer :: MultithreadedPlanning,this)));
-    mainthread[1].reset(new boost::thread(boost::bind(&DiscretizedPlacementOptimizer :: PlanningLoop,this)));
+   
     mainthread[0]->join();
+    mainthread[1].reset(new boost::thread(boost::bind(&DiscretizedPlacementOptimizer :: PlanningLoop,this)));
     mainthread[1]->join();
     return true; // always returns true if all the threads are complete
 

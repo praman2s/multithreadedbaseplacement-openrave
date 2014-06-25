@@ -92,7 +92,7 @@ int main(int argc, char *argv[])
 	    if (!!optimizer->OptimizeBase()) {
 		_time = optimizer->GetOptimizedTime();
 		Transform t = optimizer->GetOptimizedPose();
-		std::cout << "Optimized Base Pose is : " << t << std::endl;
+		std::cout << "Optimized Base Pose is : " << defaultOptimizerData->_ikPoses.size() << std::endl;
 		RAVELOG_INFO("The trajectory duration is %f . The trajectory file is saved as traj.xml\n",_time);
 
 	    } // should be called only after optimizebase
