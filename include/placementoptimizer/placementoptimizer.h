@@ -209,7 +209,7 @@ private:
    
     boost::mutex _mutex;
     std::vector< Transform > gridMap;
-
+    vector<boost::shared_ptr<boost::thread> >  _threadloop;
 
 protected :
 

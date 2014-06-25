@@ -7,7 +7,7 @@ if( CMAKE_COMPILER_IS_GNUCC OR CMAKE_COMPILER_IS_GNUCXX )
 endif( CMAKE_COMPILER_IS_GNUCC OR CMAKE_COMPILER_IS_GNUCXX )
 
 # optional in case boost is used
-find_package(Boost)
+find_package(Boost ${OpenRAVE_BOOST_VERSION} EXACT)
 
 include_directories(${OpenRAVE_INCLUDE_DIRS} ${Boost_INCLUDE_DIRS} include)
 link_directories(${OpenRAVE_LIBRARY_DIRS} ${Boost_LIBRARY_DIRS})

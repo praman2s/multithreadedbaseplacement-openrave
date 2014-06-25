@@ -120,7 +120,7 @@ void DiscretizedPlacementOptimizer:: GetTrajectoryTime(EnvironmentBasePtr env, s
 	//std::vector<dReal> vinitialconfig,vgoalconfig;
 	ptraj = RaveCreateTrajectory(env,"");
 	PlannerBase::PlannerParametersPtr params(new PlannerBase::PlannerParameters());
-	RobotBasePtr probot = env->GetRobot(_data->robotname);
+	RobotBasePtr probot = env->GetRobot("RV-4F");
 	params->_nMaxIterations = 4000; // max iterations before failure
 
 	GraphHandlePtr pgraph;
@@ -130,9 +130,10 @@ void DiscretizedPlacementOptimizer:: GetTrajectoryTime(EnvironmentBasePtr env, s
 
 		//initial config
 		probot->SetActiveDOFValues(vsolutionA);
+                std::cout << params->GetDOF() << std::endl;
 		params->vinitialconfig.resize(probot->GetActiveDOF());
 		probot->GetActiveDOFValues( params->vinitialconfig );
-                probot->GetActiveDOFMaxVel( params->_vConfigVelocityLimit );
+                
 
 		//goal config	
 		probot->SetActiveDOFValues( vsolutionB );
@@ -141,11 +142,15 @@ void DiscretizedPlacementOptimizer:: GetTrajectoryTime(EnvironmentBasePtr env, s
 
 		//setting limits
 		vector<dReal> vlower,vupper;
-		probot->GetActiveDOFLimits(params->_vConfigLowerLimit,params->_vConfigUpperLimit);
+		probot->GetActiveDOFLimits(vlower,vupper);
+                params->_vConfigLowerLimit = vlower;
+	        params->_vConfigUpperLimit = vupper;
+		  boost::this_thread::sleep(boost::posix_time::milliseconds(100));
 		
 
 		//RAVELOG_INFO("starting to plan\n");
-		
+		probot->SetActiveDOFValues(vsolutionA);
+		probot->GetActiveDOFValues( params->vinitialconfig );
 		if( !planner->InitPlan(probot,params) ) {
 			return;
 		}
@@ -173,6 +178,7 @@ DiscretizedPlacementOptimizer:: DiscretizedPlacementOptimizer
     _timeseconds = 100.0; // higher enough to let the first trajectory store into file
     k_threads = 1;
     _threads.resize(_data->numThreads);
+     _threadloop.resize(data->numThreads);
     _probot = _penv->GetRobot(_data->robotname);
     _dataReady = false; 
     _cnt = 0;
@@ -245,7 +251,7 @@ bool DiscretizedPlacementOptimizer :: PlanningLoop (){
 	_poseCondition.wait(lock);	
    
     unsigned int  localcnt = 0, threadCnt =  _data->numThreads,  _threadCnt = 0; //local count for threads
-    vector<boost::shared_ptr<boost::thread> >  _threadloop( threadCnt ); //initiate threads for mulithreaded planning
+     //initiate threads for mulithreaded planning
     std::vector< EnvironmentBasePtr > pclondedenv ( threadCnt ); 
     RobotBasePtr probot_clone;
     Transform robot_t;
