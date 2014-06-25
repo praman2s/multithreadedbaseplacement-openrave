@@ -147,7 +147,7 @@ void DiscretizedPlacementOptimizer:: GetTrajectoryTime(EnvironmentBasePtr env, s
 		//RAVELOG_INFO("starting to plan\n");
 		
 		if( !planner->InitPlan(probot,params) ) {
-			//return ptraj;
+			writeData(ptraj,env);
 		}
 		// create a new output trajectory
 		
@@ -159,9 +159,9 @@ void DiscretizedPlacementOptimizer:: GetTrajectoryTime(EnvironmentBasePtr env, s
 
 		
 	}
-        if (!! ptraj){
+        /*if (!! ptraj){
 		writeData(ptraj,env);
-	}
+	}*/
 
 }
 
@@ -245,7 +245,7 @@ bool DiscretizedPlacementOptimizer :: PlanningLoop (){
 	_poseCondition.wait(lock);	
    
     unsigned int  localcnt = 0, threadCnt =  _data->numThreads,  _threadCnt = 0; //local count for threads
-    //vector<boost::shared_ptr<boost::thread> >  _threads( threadCnt ); //initiate threads for mulithreaded planning
+    vector<boost::shared_ptr<boost::thread> >  _threadloop( threadCnt ); //initiate threads for mulithreaded planning
     std::vector< EnvironmentBasePtr > pclondedenv ( threadCnt ); 
     RobotBasePtr probot_clone;
     Transform robot_t;
@@ -264,7 +264,7 @@ bool DiscretizedPlacementOptimizer :: PlanningLoop (){
 				pclondedenv[localcnt] = _penv->CloneSelf(Clone_Bodies); 
 				probot_clone = pclondedenv[localcnt]->GetRobot(_data->robotname);
 				probot_clone->SetTransform(robot_t);
-				 _threads[localcnt].reset(new boost::thread(boost::bind(&DiscretizedPlacementOptimizer :: GetTrajectoryTime, this, pclondedenv[localcnt], vsolutionA[j], vsolutionB[k], ptraj)));
+				 _threadloop[localcnt].reset(new boost::thread(boost::bind(&DiscretizedPlacementOptimizer :: GetTrajectoryTime, this, pclondedenv[localcnt], vsolutionA[j], vsolutionB[k], ptraj)));
 		                k++;
 				localcnt++;
 				_threadCnt++;
@@ -274,7 +274,7 @@ bool DiscretizedPlacementOptimizer :: PlanningLoop (){
 				//polling rather than to wait
 				for (unsigned int m=0; m < localcnt; m++) {
 					//if(  _threads[m]->joinable()){
-					     _threads[m]->join();
+					     _threadloop[m]->join();
 					    pclondedenv[m]->Destroy();
 					    //break;
 					 //}
@@ -290,7 +290,7 @@ bool DiscretizedPlacementOptimizer :: PlanningLoop (){
 	 }
     // join all the active threads
     for (unsigned int m=0; m < localcnt; m++) {
-		 _threads[m]->join();
+		 _threadloop[m]->join();
     }
 
 

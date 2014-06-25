@@ -16,9 +16,6 @@
 #include <math.h>
 #include <iostream>
 #include <boost/thread/recursive_mutex.hpp>
-#include <boost/geometry.hpp>
-#include <boost/geometry/geometries/adapted/boost_polygon.hpp>
-#include <boost/phoenix/bind/bind_member_function.hpp>
 
 using namespace OpenRAVE;
 using namespace std;
