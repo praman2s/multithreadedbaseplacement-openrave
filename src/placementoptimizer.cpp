@@ -22,7 +22,7 @@ void DiscretizedPlacementOptimizer :: writePoseData(Transform T, std::vector< st
 		_dataReady = true;
 	}
 	
-	//_poseCondition.notify_one();
+	_poseCondition.notify_one();
 	
 	
 }
@@ -134,24 +134,23 @@ void DiscretizedPlacementOptimizer:: GetTrajectoryTime(EnvironmentBasePtr env, s
                 std::cout << params->GetDOF() << std::endl;
 		params->vinitialconfig.resize(probot->GetActiveDOF());
 		probot->GetActiveDOFValues( params->vinitialconfig );
-                
+                std::cout << params->vinitialconfig[0] << std::endl;
 
 		//goal config	
 		probot->SetActiveDOFValues( vsolutionB );
 		params->vgoalconfig.resize( probot->GetActiveDOF() );
 		probot->GetActiveDOFValues( params->vgoalconfig );
+		
 
 		//setting limits
 		vector<dReal> vlower,vupper;
 		probot->GetActiveDOFLimits(vlower,vupper);
                 params->_vConfigLowerLimit = vlower;
 	        params->_vConfigUpperLimit = vupper;
-		  boost::this_thread::sleep(boost::posix_time::milliseconds(100));
+		boost::this_thread::sleep(boost::posix_time::milliseconds(100));
 		
-
-		//RAVELOG_INFO("starting to plan\n");
-		probot->SetActiveDOFValues(vsolutionA);
-		probot->GetActiveDOFValues( params->vinitialconfig );
+                
+		
 		if( !planner->InitPlan(probot,params) ) {
 			return;
 		}
@@ -181,6 +180,7 @@ DiscretizedPlacementOptimizer:: DiscretizedPlacementOptimizer
     _threads.resize(_data->numThreads);
      _threadloop.resize(data->numThreads);
     _probot = _penv->GetRobot(_data->robotname);
+     _probot->SetActiveManipulator(_data->manipname);
     _dataReady = false; 
     _cnt = 0;
     
@@ -247,10 +247,10 @@ bool DiscretizedPlacementOptimizer :: OptimizeBase(){
 /// Instantiate a thread waiting for a valid base pose
 bool DiscretizedPlacementOptimizer :: PlanningLoop (){
     
-    boost::unique_lock<boost::mutex> lock(_posemutex);
+    //boost::unique_lock<boost::mutex> lock(_posemutex);
 	
-    while(!_dataReady)
-	_poseCondition.wait(lock);	
+    /*while(!_dataReady)
+	_poseCondition.wait(lock);	*/
    
     unsigned int  localcnt = 0, threadCnt =  _data->numThreads,  _threadCnt = 0; //local count for threads
      //initiate threads for mulithreaded planning
@@ -272,7 +272,7 @@ bool DiscretizedPlacementOptimizer :: PlanningLoop (){
 				pclondedenv[localcnt] = _penv->CloneSelf(Clone_Bodies); 
 				probot_clone = pclondedenv[localcnt]->GetRobot(_data->robotname);
 				probot_clone->SetTransform(robot_t);
-				 _threadloop[localcnt].reset(new boost::thread(boost::bind(&DiscretizedPlacementOptimizer :: GetTrajectoryTime, this, pclondedenv[localcnt], vsolutionA[j], vsolutionB[k], ptraj)));
+				_threadloop[localcnt].reset(new boost::thread(boost::bind(&DiscretizedPlacementOptimizer :: GetTrajectoryTime, this, pclondedenv[localcnt], vsolutionA[j], vsolutionB[k], ptraj)));
 		                k++;
 				localcnt++;
 				_threadCnt++;
@@ -300,7 +300,8 @@ bool DiscretizedPlacementOptimizer :: PlanningLoop (){
     for (unsigned int m=0; m < localcnt; m++) {
 		 _threadloop[m]->join();
     }
-
+    localcnt = 0;
+		
 
   }
   
