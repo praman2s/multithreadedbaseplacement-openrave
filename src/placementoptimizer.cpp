@@ -16,7 +16,7 @@ void DiscretizedPlacementOptimizer :: writePoseData(Transform T, std::vector< st
 	Map.solnsB = solnsB;
 	{
 		boost::unique_lock<boost::mutex> lock(_posemutex);
-		std::cout << Map.t.trans << std::endl;
+		//std::cout << Map.t.trans << std::endl;
 		_data->_ikPoses.push_back(Map);
 		RAVELOG_INFO("Notify a waiting thread \n");
 		_dataReady = true;
@@ -117,24 +117,24 @@ void DiscretizedPlacementOptimizer:: GetTrajectoryTime(EnvironmentBasePtr env, s
 
         //thread::id get_id();
 	//std::cout << "this thread ::" << boost::this_thread::get_id() << std::endl;
+	EnvironmentMutex::scoped_lock lock(env->GetMutex()); // lock environment
 	PlannerBasePtr planner = RaveCreatePlanner(env,"birrt");
 	//std::vector<dReal> vinitialconfig,vgoalconfig;
 	ptraj = RaveCreateTrajectory(env,"");
 	PlannerBase::PlannerParametersPtr params(new PlannerBase::PlannerParameters());
 	RobotBasePtr probot = env->GetRobot("RV-4F");
-	params->_nMaxIterations = 4000; // max iterations before failure
+	params->_nMaxIterations = 8000; // max iterations before failure
 
 	GraphHandlePtr pgraph;
 	{
-		EnvironmentMutex::scoped_lock lock(env->GetMutex()); // lock environment
+		
 		params->SetRobotActiveJoints(probot); // set planning configuration space to current active dofs
 
 		//initial config
-		probot->SetActiveDOFValues(vsolutionA);
-                std::cout << params->GetDOF() << std::endl;
-		params->vinitialconfig.resize(probot->GetActiveDOF());
+		probot->SetActiveDOFValues( vsolutionA );
+                params->vinitialconfig.resize(probot->GetActiveDOF());
 		probot->GetActiveDOFValues( params->vinitialconfig );
-                std::cout << params->vinitialconfig[0] << std::endl;
+                //std::cout << params->vinitialconfig[0] << std::endl;
 
 		//goal config	
 		probot->SetActiveDOFValues( vsolutionB );
@@ -147,7 +147,7 @@ void DiscretizedPlacementOptimizer:: GetTrajectoryTime(EnvironmentBasePtr env, s
 		probot->GetActiveDOFLimits(vlower,vupper);
                 params->_vConfigLowerLimit = vlower;
 	        params->_vConfigUpperLimit = vupper;
-		boost::this_thread::sleep(boost::posix_time::milliseconds(100));
+		//boost::this_thread::sleep(boost::posix_time::milliseconds(100));
 		
                 
 		
@@ -234,9 +234,8 @@ bool DiscretizedPlacementOptimizer :: OptimizeBase(){
    
     std::vector < boost::shared_ptr < boost::thread > > mainthread(2);
     mainthread[0].reset(new boost::thread(boost::bind(&DiscretizedPlacementOptimizer :: MultithreadedPlanning,this)));
-   
-    mainthread[0]->join();
     mainthread[1].reset(new boost::thread(boost::bind(&DiscretizedPlacementOptimizer :: PlanningLoop,this)));
+    mainthread[0]->join();
     mainthread[1]->join();
     return true; // always returns true if all the threads are complete
 
@@ -247,10 +246,10 @@ bool DiscretizedPlacementOptimizer :: OptimizeBase(){
 /// Instantiate a thread waiting for a valid base pose
 bool DiscretizedPlacementOptimizer :: PlanningLoop (){
     
-    //boost::unique_lock<boost::mutex> lock(_posemutex);
+    boost::unique_lock<boost::mutex> lock(_posemutex);
 	
-    /*while(!_dataReady)
-	_poseCondition.wait(lock);	*/
+    while(!_dataReady)
+	_poseCondition.wait(lock);	
    
     unsigned int  localcnt = 0, threadCnt =  _data->numThreads,  _threadCnt = 0; //local count for threads
      //initiate threads for mulithreaded planning
