@@ -5,9 +5,9 @@ Bug fixes after delivery
 
 Tested in :
 
-	      Ubuntu 14.04 ( gcc 4.7.3 )
-	      Boost 1.54.0
-	      OpenRAVE 0.9 (master)
+	      Ubuntu 12.04 ( gcc 4.5.3 )
+	      Boost 1.43.0
+	      OpenRAVE 0.9 (master) -- shows error with latest_stable
          
               	      
 
