@@ -178,13 +178,18 @@ private:
     /// \return If called after optimizebase, returns the optimized time
     bool GetIKSolutions(EnvironmentBasePtr _penv, Transform Pose, std::vector< std::vector< dReal > > &vsolution);
 
-     void writePoseData(Transform T, std::vector< std::vector< dReal > > solnsA, std::vector< std::vector< dReal > > solnsB);
+    void writePoseData(Transform T, std::vector< std::vector< dReal > > solnsA, std::vector< std::vector< dReal > > solnsB);
+     
+    /// create new thread
+    //bool createThread(boost::function funcPtr);
    
-
     void writeData(TrajectoryBasePtr ptraj, EnvironmentBasePtr env);
+    /// Future Implementation
+    bool IsOK();    
+
     /// Cloned Environment
     EnvironmentBasePtr _penv;
-
+    
     /// Robot from cloned environment
     RobotBasePtr _probot;
 
@@ -210,6 +215,7 @@ private:
     boost::mutex _mutex;
     std::vector< Transform > gridMap;
     vector<boost::shared_ptr<boost::thread> >  _threadloop;
+    
 
 protected :
 
