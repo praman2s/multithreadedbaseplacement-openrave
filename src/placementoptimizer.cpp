@@ -8,6 +8,34 @@
 #include <placementoptimizer/placementoptimizer.h>
 
 
+
+
+
+DiscretizedPlacementOptimizer:: DiscretizedPlacementOptimizer
+    (EnvironmentBasePtr penv,boost::shared_ptr<PlacementOptimizerData> data) :
+    _penv(penv->CloneSelf(Clone_Bodies)), // operates on cloned environment. Does not disturb the main environment
+    _data(data){
+    _timeseconds = 100.0; // higher enough to let the first trajectory store into file
+    k_threads = 1;
+    _threads.resize(_data->numThreads);
+     _threadloop.resize(data->numThreads);
+    _probot = _penv->GetRobot(_data->robotname);
+     _probot->SetActiveManipulator(_data->manipname);
+    _dataReady = false; 
+    _cnt = 0;
+    
+
+}
+
+DiscretizedPlacementOptimizer :: ~DiscretizedPlacementOptimizer(){
+
+   //check finally if any threads are active and join. Should not raise this condition.
+   for (unsigned int m=0; m < _cnt; m++) {
+		 _threads[m]->join();
+   }
+
+}
+
 void DiscretizedPlacementOptimizer :: writePoseData(Transform T, std::vector< std::vector< dReal > > solnsA, std::vector< std::vector< dReal > > solnsB) {
 	_dataReady = false;        
 	struct PoseMap Map;
@@ -75,9 +103,6 @@ void DiscretizedPlacementOptimizer :: CheckNoCollisions(EnvironmentBasePtr pclon
 	
     }
     
-	
-    
-
 }
 
 bool DiscretizedPlacementOptimizer :: GetIKSolutions(EnvironmentBasePtr _penv, Transform Pose, std::vector< std::vector< dReal > > &vsolution){
@@ -159,40 +184,12 @@ void DiscretizedPlacementOptimizer:: GetTrajectoryTime(EnvironmentBasePtr env, s
 		if( !planner->PlanPath(ptraj) ) {
 			RAVELOG_WARN("plan failed \n");
 			//return NULL;
-			
 		}
 
-		
 	}
         if (!! ptraj){
 		writeData(ptraj,env);
 	}
-
-}
-
-
-DiscretizedPlacementOptimizer:: DiscretizedPlacementOptimizer
-    (EnvironmentBasePtr penv,boost::shared_ptr<PlacementOptimizerData> data) :
-    _penv(penv->CloneSelf(Clone_Bodies)), // operates on cloned environment. Does not disturb the main environment
-    _data(data){
-    _timeseconds = 100.0; // higher enough to let the first trajectory store into file
-    k_threads = 1;
-    _threads.resize(_data->numThreads);
-     _threadloop.resize(data->numThreads);
-    _probot = _penv->GetRobot(_data->robotname);
-     _probot->SetActiveManipulator(_data->manipname);
-    _dataReady = false; 
-    _cnt = 0;
-    
-
-}
-
-DiscretizedPlacementOptimizer :: ~DiscretizedPlacementOptimizer(){
-
-   //check finally if any threads are active and join. Should not raise this condition.
-   for (unsigned int m=0; m < _cnt; m++) {
-		 _threads[m]->join();
-   }
 
 }
 

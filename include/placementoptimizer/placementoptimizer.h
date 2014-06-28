@@ -149,6 +149,12 @@ private:
     /// \param string Bodies like floor can be ignored
     /// \return bool returns true if no collision occured
     void CheckNoCollisions(EnvironmentBasePtr env);
+
+    
+    /// \brief Increement a thread and assign the function otherwise wait for one of the thread to complete.
+    /// \param Function to be binded
+    /// \return Returns the position for the vector of threads
+    unsigned int IncrementThread();
     
 
     /// \brief Multithreaded Trajectory generation from Pt A to Pt B with differnt IK solutions.
