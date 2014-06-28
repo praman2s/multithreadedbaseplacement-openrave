@@ -11,6 +11,7 @@
 #include <boost/noncopyable.hpp>
 #include <boost/thread/condition_variable.hpp>
 #include <boost/thread/mutex.hpp>
+#include <boost/enable_shared_from_this.hpp>
 
 /////////////////////////////////////////////////////////////////////////////////
 /// structure to store map values. 
@@ -97,7 +98,7 @@ public:
 /// Optimizes the position of the base to move manipulator from A to B w.r.t time
 /////////////////////////////////////////////////////////////////////////////////
 
-class PlacementOptimizerBase {
+class PlacementOptimizerBase : public boost::enable_shared_from_this<PlacementOptimizerBase> {
 
 public:
     virtual ~PlacementOptimizerBase(){
@@ -148,6 +149,12 @@ private:
     /// \param string Bodies like floor can be ignored
     /// \return bool returns true if no collision occured
     void CheckNoCollisions(EnvironmentBasePtr env);
+
+    
+    /// \brief Increement a thread and assign the function otherwise wait for one of the thread to complete.
+    /// \param Function to be binded
+    /// \return Returns the position for the vector of threads
+    unsigned int IncrementThread();
     
 
     /// \brief Multithreaded Trajectory generation from Pt A to Pt B with differnt IK solutions.
@@ -177,13 +184,18 @@ private:
     /// \return If called after optimizebase, returns the optimized time
     bool GetIKSolutions(EnvironmentBasePtr _penv, Transform Pose, std::vector< std::vector< dReal > > &vsolution);
 
-     void writePoseData(Transform T, std::vector< std::vector< dReal > > solnsA, std::vector< std::vector< dReal > > solnsB);
+    void writePoseData(Transform T, std::vector< std::vector< dReal > > solnsA, std::vector< std::vector< dReal > > solnsB);
+     
+    /// create new thread
+    //bool createThread(boost::function funcPtr);
    
-
     void writeData(TrajectoryBasePtr ptraj, EnvironmentBasePtr env);
+    /// Future Implementation
+    bool IsOK();    
+
     /// Cloned Environment
     EnvironmentBasePtr _penv;
-
+    
     /// Robot from cloned environment
     RobotBasePtr _probot;
 
@@ -208,7 +220,8 @@ private:
    
     boost::mutex _mutex;
     std::vector< Transform > gridMap;
-
+    vector<boost::shared_ptr<boost::thread> >  _threadloop;
+    
 
 protected :
 
